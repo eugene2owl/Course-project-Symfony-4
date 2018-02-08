@@ -1,15 +1,37 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: eugene
- * Date: 05.02.18
- * Time: 12:40
- */
+
+declare(strict_types=1);
 
 namespace App\Controller;
 
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
-class SecurityController
+
+class SecurityController extends Controller
 {
+    /**
+     * @Route("/login", name="login")
+     */
+    public function login(Request $request, AuthenticationUtils $authUtils)
+    {
+        $error = $authUtils->getLastAuthenticationError();
 
+        $lastUsername = $authUtils->getLastUsername();
+
+        return $this->render('security/login.html.twig', array(
+            'last_username' => $lastUsername,
+            'error'         => $error,
+        ));
+    }
+
+    /**
+     * @Route("/login/forgotPassword", name="forgotPassword")
+     */
+    public function forgotPassword()
+    {
+        return $this->render('security/forgotPassword.html.twig');
+    }
 }
