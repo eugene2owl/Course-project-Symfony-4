@@ -31,6 +31,6 @@ class AdminController extends Controller
 
         $doctrine->getManager()->flush();
 
-        return new Response( '<html><body>Admin</body></html>');
+        return $this->render('adminPage.html.twig');
     }
 }

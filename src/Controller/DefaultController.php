@@ -12,12 +12,10 @@ class DefaultController extends Controller
 {
      /**
       * @Route("/")
-      *
-      * @return Response
       */
     public function index()
     {
-        return new Response("<html><h1 align='center'>You are on home page.</h1></html>");
+        return $this->render('security/home.html.twig');
     }
 
     /**
@@ -29,4 +27,5 @@ class DefaultController extends Controller
     {
         return new Response('Simple! Easy! Great!');
     }
+
 }
