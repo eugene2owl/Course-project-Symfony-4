@@ -42,8 +42,27 @@ class User implements UserInterface
     private $username;
 
     /**
-     *
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank()
+     */
+    private $firstname;
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank()
+     */
+    private $secondname;
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank()
+     */
+    private $thirdname;
+
+
+    /**
+     * @Assert\NotBlank()
+     * @Assert\Length(max=4096)
      */
     private $plainPassword;
 
@@ -83,6 +102,36 @@ class User implements UserInterface
     public function setUsername($username)
     {
         $this->username = $username;
+    }
+
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname($username)
+    {
+        $this->firstname = $username;
+    }
+
+    public function getSecondname()
+    {
+        return $this->secondname;
+    }
+
+    public function setSecondname($username)
+    {
+        $this->secondname = $username;
+    }
+
+    public function getThirdname()
+    {
+        return $this->thirdname;
+    }
+
+    public function setThirdname($username)
+    {
+        $this->thirdname = $username;
     }
 
     public function getPlainPassword()
