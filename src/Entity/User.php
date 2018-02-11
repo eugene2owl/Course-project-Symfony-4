@@ -8,16 +8,16 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity
- * @UniqueEntity(fields="email", message="Email already taken")
- * @UniqueEntity(fields="username", message="Username already taken")
+ * @ORM\Table(name="user")
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ *
  */
 class User implements UserInterface
 {
     /**
      * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -28,6 +28,13 @@ class User implements UserInterface
      */
     private $email;
 
+
+    /**
+     * @Assert\NotBlank()
+     *  @ORM\Column(type="string", length=64)
+     */
+    private $city;
+
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank()
@@ -35,27 +42,10 @@ class User implements UserInterface
     private $username;
 
     /**
-     * @Assert\NotBlank()
-     * @Assert\Length(max=4096)
+     *
+     * @ORM\Column(type="string", length=64)
      */
     private $plainPassword;
-
-    /**
-     * @return mixed
-     */
-    public function getPlainPassword()
-    {
-        return $this->plainPassword;
-    }
-
-    /**
-     * @param mixed $plainPassword
-     */
-    public function setPlainPassword($plainPassword)
-    {
-        $this->plainPassword = $plainPassword;
-    }
-
 
     /**
      * The below length depends on the "algorithm" you use for encoding
@@ -65,8 +55,6 @@ class User implements UserInterface
      */
     private $password;
 
-    // other properties and methods
-
     public function getEmail()
     {
         return $this->email;
@@ -75,6 +63,16 @@ class User implements UserInterface
     public function setEmail($email)
     {
         $this->email = $email;
+    }
+
+    public function getcity()
+    {
+        return $this->city;
+    }
+
+    public function setcity($city)
+    {
+        $this->city = $city;
     }
 
     public function getUsername()
@@ -87,7 +85,7 @@ class User implements UserInterface
         $this->username = $username;
     }
 
-    /*public function getPlainPassword()
+    public function getPlainPassword()
     {
         return $this->plainPassword;
     }
@@ -95,7 +93,7 @@ class User implements UserInterface
     public function setPlainPassword($password)
     {
         $this->plainPassword = $password;
-    }*/
+    }
 
     public function getPassword()
     {
@@ -109,13 +107,8 @@ class User implements UserInterface
 
     public function getSalt()
     {
-        // The bcrypt and argon2i algorithms don't require a separate salt.
-        // You *may* need a real salt if you choose a different encoder.
         return null;
     }
-
-    // other methods, including security methods like getRoles()
-
 
     public function getRoles()
     {
@@ -129,18 +122,18 @@ class User implements UserInterface
     /** @see \Serializable::serialize() */
     public function serialize()
     {
-       /* return serialize(array(
-            $this->id,
-            $this->username,
-            $this->password,
-            $this->plainPassword,
-            // see section on salt below
-            // $this->salt,
-        ));*/
+        /* return serialize(array(
+             $this->id,
+             $this->username,
+             $this->password,
+             $this->plainPassword,
+             // see section on salt below
+             // $this->salt,
+         ));*/
     }
 
     /** @see \Serializable::unserialize() */
-    public function unserialize($serialized)
+    public function unSerialize($serialized)
     {
         /*list (
             $this->id,
