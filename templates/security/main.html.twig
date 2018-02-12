@@ -2,12 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport">
+    <link type="text/css" rel="stylesheet" href="../../assets/main.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
 <body>
     <h1 align="center">List of quiz</h1>
+    <table class='table table-hover' width="300px">
+    {% if quizList is defined %}
+        <tr class="thead-dark">
+            <th>#</th>
+            <th>name</th>
+            <th>members count</th>
+            <th>status</th>
+            <th colspan="5">leader name</th>
+        </tr>
+        {% for quiz in quizList %}
+            <tr>
+                <td>{{ quiz.id }}</td>
+                <td>{{ quiz.quizname }}</td>
+                <td> {{ quiz.playersAmount }} </td>
+                {% if quiz.status == 0 %}
+                    <td> {{ 'Enabled' }} </td>
+                {% else %}
+                    <td> {{ 'Disabled' }} </td>
+                {% endif %}
+                <td> {{ quiz.firstNameLider }} </td>
+                <td> {{ quiz.secondNameLider }} </td>
+                <td> {{ quiz.thirdNameLider }} </td>
+                <td> <a href="">play</a> </td>
+                <td> <a href="">watch results</a> </td>
+            </tr>
+            {{ quiz.questionList.0 }}
+        {% endfor %}
+    {% endif %}
+    {% if quizList is not defined %}
+        {{ "Not defined" }}
+    {% endif %}
+    </table>
 </body>
 </html>

@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Quiz;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\ORM\EntityRepository;
 
 class QuizRepository extends ServiceEntityRepository
 {
@@ -12,6 +13,16 @@ class QuizRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Quiz::class);
     }
+
+    public function findAllOrderedByName()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT q FROM App:quiz p ORDER BY q.name ASC'
+            )
+            ->getResult();
+    }
+
 
     /*
     public function findBySomething($value)

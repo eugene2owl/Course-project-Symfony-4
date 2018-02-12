@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Question;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -51,6 +52,21 @@ class Quiz
      * @Assert\NotBlank()
      */
     private $thirdNameLider;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="quiz")
+     * @ORM\JoinColumn(name="list_of_questions", referencedColumnName="id")
+     * @ORM\Column(type="array")
+     */
+    private $questionList;
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * @return mixed
@@ -148,5 +164,19 @@ class Quiz
         $this->thirdNameLider = $thirdNameLider;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getQuestionList()
+    {
+        return $this->questionList;
+    }
 
+    /**
+     * @param mixed $questionlist
+     */
+    public function setQuestionList($questionlist): void
+    {
+        $this->questionList = $questionlist;
+    }
 }
