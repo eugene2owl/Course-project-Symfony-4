@@ -1,9 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
 <html>
-    <h1 align='center'>You are on home page.</h1>
-    <form action="" method="post">
-        <ul>
-            <li><a href="http://symfony4.loc/index.php/login">login</a></li>
-            <li><a href="http://symfony4.loc/index.php/register">register</a></li>
-        </ul>
-    </form>
+    <head>
+        <meta charset="UTF-8">
+
+        {% block stylesheets %}
+            {{ parent() }}
+            <link href="{{ asset('css/home.css') }}" rel="stylesheet" />
+        {% endblock %}
+
+    </head>
+    <body>
+        <h1 align='center' id="mainHeader">Welcome!</h1>
+        <div id="toolbar">
+            <a class="btn btn-primary" href="http://symfony4.loc/index.php/login" role="button">Login</a>
+            <a class="btn btn-primary" href="http://symfony4.loc/index.php/register" role="button">Registration</a>
+        </div>
+    </body>
 </html>
+{% endblock %}

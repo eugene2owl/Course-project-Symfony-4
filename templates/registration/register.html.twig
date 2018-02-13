@@ -1,9 +1,52 @@
-{{ form_start(form) }}
-    {{ form_row(form.username) }}
-    {{ form_row(form.email) }}
-    {{ form_row(form.city) }}
-    {{ form_row(form.plainPassword.first) }}
-    {{ form_row(form.plainPassword.second) }}
+{% extends 'base.html.twig' %}
 
-<button type="submit">Register!</button>
-{{ form_end(form) }}
+{% block body %}
+
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    {% block stylesheets %}
+        {{ parent() }}
+        <link href="{{ asset('css/register.css') }}" rel="stylesheet" />
+    {% endblock %}
+    <title>{% block title %}Registration{% endblock %}</title>
+</head>
+    <body>
+        <div class="wrapper">
+            <div class="form-signin">
+                <h2 class="form-signin-heading">Registration</h2>
+                    {{ form_start(form) }}
+                        {{ form_errors(form) }}
+
+                        {{ form_errors(form.username) }}
+                        {{ form_widget(form.username, {'attr': {'class': 'form-control', 'placeholder': 'username'}}) }}
+
+                        {{ form_errors(form.email) }}
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'email'}}) }}
+
+                        {{ form_errors(form.city) }}
+                        {{ form_widget(form.city, {'attr': {'class': 'form-control', 'placeholder': 'city'}}) }}
+
+                        {{ form_errors(form.firstname) }}
+                        {{ form_widget(form.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Name'}}) }}
+
+                        {{ form_errors(form.secondname) }}
+                        {{ form_widget(form.secondname, {'attr': {'class': 'form-control', 'placeholder': 'Surname'}}) }}
+
+                        {{ form_errors(form.thirdname) }}
+                        {{ form_widget(form.thirdname, {'attr': {'class': 'form-control', 'placeholder': 'Third name'}}) }}
+
+                        {{ form_errors(form.plainPassword.first) }}
+                        {{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'password'}}) }}
+
+                        {{ form_errors(form.plainPassword.second) }}
+                        {{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'password'}}) }}
+                        <br>
+                        <button type="submit" class="btn btn-lg btn-primary btn-block">Register!</button>
+                    {{ form_end(form) }}
+            </div>
+        </div>
+    </body>
+</html>
+{% endblock %}
