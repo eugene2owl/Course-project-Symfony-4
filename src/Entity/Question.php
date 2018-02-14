@@ -35,31 +35,54 @@ class Question
 
     /**
      * @ORM\OneToMany(targetEntity="Answer", mappedBy="question")
-     * @ORM\JoinColumn(name="answersIds", referencedColumnName="id")
-     * @ORM\Column(type="array")
+     * @ORM\JoinColumn(name="list_of_answers", referencedColumnName="id")
      */
-    private $answers;
+    private $answerList;
 
-    public function __construct(string $text) {
-        $this->answers = array();
-        $this->text = $text;
-    }
-    public function  addAnswer(Answer $answer):void {
-        array_push($this->answers, $answer->getId());
-        $answer->setQuestion($this);
-    }
-
-    public function getAnswers()
+    public function __construct(string $text)
     {
-        return $this->answers;
+        $this->answerList = new ArrayCollection();
+        $this->text = $text;
     }
 
     /**
-     * @param mixed $answers
+     * @param mixed $answer
      */
-    public function setAnswers($answers): void
+    public function  setAnswerList(Answer $answer): void
     {
-        $this->answers = $answers;
+        $this->answerList->add($answer);
+        $answer->setQuestion($this);
     }
 
+    /**
+     * @return Collection|Answer[]
+     */
+    public function getAnswerList()
+    {
+        return $this->answerList;
+    }
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Quiz", inversedBy="questionList")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $quiz;
+
+    public function getQuiz(): Quiz
+    {
+        return $this->quiz;
+    }
+
+    public function setQuiz(Quiz $quiz)
+    {
+        $this->quiz = $quiz;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
 }

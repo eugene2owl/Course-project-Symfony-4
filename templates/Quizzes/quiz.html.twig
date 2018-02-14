@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Quiz {{ quiz.quizname }}</h1>
+
+    {{ currentQuestionNumber }}
+    {{ ")" }}
+    {% for question in quiz.questionList %}
+        {% if loop.index == currentQuestionNumber %}
+            {{ question.getText }}
+            {% for answer in question.answerList %}
+                <p><label><input type="radio" name="time" value="{{ answer.getText }}">{{ answer.getText }}</label></p>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+
+    <a href="{{ nextQuestionLink }}">next</a>
+</body>
+</html>

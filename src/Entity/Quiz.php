@@ -6,6 +6,8 @@ use App\Entity\Question;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\QuizRepository")
@@ -56,10 +58,14 @@ class Quiz
     /**
      * @ORM\OneToMany(targetEntity="Question", mappedBy="quiz")
      * @ORM\JoinColumn(name="list_of_questions", referencedColumnName="id")
-     * @ORM\Column(type="array")
+     *
      */
     private $questionList;
 
+    public function __construct()
+    {
+        $this->questionList = new ArrayCollection();
+    }
     /**
      * @return mixed
      */
@@ -165,7 +171,7 @@ class Quiz
     }
 
     /**
-     * @return mixed
+     * @return Collection|Question[]
      */
     public function getQuestionList()
     {
@@ -173,10 +179,10 @@ class Quiz
     }
 
     /**
-     * @param mixed $questionlist
+     * @param mixed $question
      */
-    public function setQuestionList($questionlist): void
+    public function setQuestionList(Question $question): void
     {
-        $this->questionList = $questionlist;
+        $this->questionList->add($question);
     }
 }

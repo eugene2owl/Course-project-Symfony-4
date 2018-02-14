@@ -29,21 +29,48 @@ class Answer
     /**
      * @ORM\Column(type="string", length=60)
      */
-    private $answ;
+    private $text;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Question")
-     * @ORM\JoinColumn(name="question_id", referencedColumnName="id")
+     * @return mixed
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @param mixed $text
+     */
+    public function setText($text): void
+    {
+        $this->text = $text;
+    }
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isTrue;
+
+    public function __construct(string $answer, int $isTrue)
+    {
+        $this->text = $answer;
+        $this->isTrue = $isTrue;
+    }
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Question", inversedBy="answerList")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $question;
 
-    public function __construct(string $answ)
+    public function getQuestion(): Question
     {
-        $this->answ = $answ;
+        return $this->question;
     }
 
-    public function setQuestion(Question $question):void {
+    public function setQuestion(Question $question):void
+    {
         $this->question = $question;
-
     }
 }

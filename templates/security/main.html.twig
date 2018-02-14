@@ -10,11 +10,9 @@
         {{ parent() }}
         <link href="{{ asset('css/main.css') }}" rel="stylesheet" />
     {% endblock %}
-
     <title>{% block title %}List of quizzes!{% endblock %}</title>
 </head>
 <body>
-
     <h1 align="center" id="mainHeader">List of quizzes</h1>
     <table class='table table-hover' width="300px">
     {% if quizList is defined %}
@@ -38,14 +36,10 @@
                 <td> {{ quiz.firstNameLider }} </td>
                 <td> {{ quiz.secondNameLider }} </td>
                 <td> {{ quiz.thirdNameLider }} </td>
-                <td> <a href="">play</a> </td>
+                <td> <a href="http://symfony4.loc/quizzes/{{ quiz.quizname }}">play</a> </td>
                 <td> <a href="">watch results</a> </td>
             </tr>
-            {{ quiz.questionList.0 }}
         {% endfor %}
-    {% endif %}
-    {% if quizList is not defined %}
-        {{ "Not defined" }}
     {% endif %}
     </table>
 </body>

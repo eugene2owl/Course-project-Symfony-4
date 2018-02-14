@@ -34,7 +34,7 @@ class RegistrationController extends Controller
             // ... do any other work - like sending them an email, etc
             // maybe set a "flash" success message for the user
 
-            return $this->redirect('http://symfony4.loc/index.php/main');
+            return $this->redirect('http://symfony4.loc/main');
         }
 
         return $this->render(

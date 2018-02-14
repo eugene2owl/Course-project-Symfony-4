@@ -17,15 +17,4 @@ class DefaultController extends Controller
     {
         return $this->render('security/home.html.twig');
     }
-
-    /**
-     * @Route("/simple")
-     *
-     * @return Response
-     */
-    public function simple()
-    {
-        return new Response('Simple! Easy! Great!');
-    }
-
 }
