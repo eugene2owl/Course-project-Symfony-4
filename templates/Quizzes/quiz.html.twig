@@ -1,3 +1,7 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -5,22 +9,47 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    {% block stylesheets %}
+        {{ parent() }}
+        <link href="{{ asset('css/question.css') }}" rel="stylesheet" />
+    {% endblock %}
+    <title>{% block title %}Question {{ currentQuestionNumber }}{% endblock %}</title>
 </head>
 <body>
-    <h1>Quiz {{ quiz.quizname }}</h1>
+    <h2 class="quizName">Quiz '{{ quiz.quizname }}'</h2>
 
-    {{ currentQuestionNumber }}
-    {{ ")" }}
-    {% for question in quiz.questionList %}
-        {% if loop.index == currentQuestionNumber %}
-            {{ question.getText }}
-            {% for answer in question.answerList %}
-                <p><label><input type="radio" name="time" value="{{ answer.getText }}">{{ answer.getText }}</label></p>
-            {% endfor %}
-        {% endif %}
-    {% endfor %}
-
-    <a href="{{ nextQuestionLink }}">next</a>
+    <form id='questionList' action="{{ nextQuestionLink }}">
+        <div class="wrapper container">
+            <div class="form-signin">
+                <h2 class="form-signin-heading">{{ currentQuestionNumber }}
+                {{ ")" }}
+                {% for question in quiz.questionList %}
+                    {% if loop.index == currentQuestionNumber %}
+                        {{ question.getText }}
+                    {% endif %}
+                {% endfor %}</h2>
+                <ul>
+                {% for question in quiz.questionList %}
+                    {% if loop.index == currentQuestionNumber %}
+                        {% for answer in question.answerList %}
+                            <li>
+                                <input id="{{ answer.getText }}" type="radio" name="select" value="{{ answer.getText }}">
+                                <label for="{{ answer.getText }}">{{ answer.getText }}</label>
+                                <div class="check"></div>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                </ul>
+                <br>
+                <input type='submit' form='questionList' value="button next" class="btn btn-lg btn-primary btn-block" disabled>
+            </div>
+        </div>
+    </form>
 </body>
 </html>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/question.js') }}"></script>
+{% endblock %}

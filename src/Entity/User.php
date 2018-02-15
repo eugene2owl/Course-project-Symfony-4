@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Table(name="user")
@@ -159,38 +161,23 @@ class User implements UserInterface
         return null;
     }
 
-    public function getRoles()
-    {
-        return array('ROLE_USER');
-    }
-
     public function eraseCredentials()
     {
     }
 
-    /** @see \Serializable::serialize() */
-    public function serialize()
+    /**
+     * @var ArrayCollection
+     * @ORM\Column(type="array")
+     */
+    private $roles;
+
+    public function __construct()
     {
-        /* return serialize(array(
-             $this->id,
-             $this->username,
-             $this->password,
-             $this->plainPassword,
-             // see section on salt below
-             // $this->salt,
-         ));*/
+        $this->roles = ["ROLE_USER"];
     }
 
-    /** @see \Serializable::unserialize() */
-    public function unSerialize($serialized)
+    public function getRoles()
     {
-        /*list (
-            $this->id,
-            $this->username,
-            $this->password,
-            $this->plainPassword,
-            // see section on salt below
-            // $this->salt
-            ) = unserialize($serialized);*/
+        return $this->roles;
     }
 }

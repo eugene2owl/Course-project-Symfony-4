@@ -15,22 +15,7 @@ class AdminController extends Controller
      */
     public function admin()
     {
-        $question = new Question('How are you?');
-        $answer = new Answer('Nice');
-        $answer2 = new Answer('Great');
-
-        $question->addAnswer($answer);
-        $question->addAnswer($answer2);
-
-        $doctrine = $this->getDoctrine();
-
-        $doctrine->getManager()->persist($answer);
-        $doctrine->getManager()->persist($question);
-        $doctrine->getManager()->persist($answer2);
-
-
-        $doctrine->getManager()->flush();
-
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page!');
         return $this->render('adminPage.html.twig');
     }
 }

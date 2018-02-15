@@ -36,8 +36,8 @@
                 <td> {{ quiz.firstNameLider }} </td>
                 <td> {{ quiz.secondNameLider }} </td>
                 <td> {{ quiz.thirdNameLider }} </td>
-                <td> <a href="http://symfony4.loc/quizzes/{{ quiz.quizname }}">play</a> </td>
-                <td> <a href="">watch results</a> </td>
+                <td> <a class="btn btn-primary btn-block btn-primary" href="http://symfony4.loc/main/quizzes/{{ quiz.quizname }}">Start</a> </td>
+                <td> <a href="" class="btn btn-primary btn-block btn-info btn-sm" >Watch results</a> </td>
             </tr>
         {% endfor %}
     {% endif %}

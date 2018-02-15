@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 class QuizeController extends Controller
 {
     /**
-     * @Route("/quizzes/{slug}",
+     * @Route("/main/quizzes/{slug}",
      *     name="quizStart",
      *     )
      */
@@ -43,7 +43,7 @@ class QuizeController extends Controller
     }
 
     /**
-     * @Route("/quizzes/{slug}/{number}",
+     * @Route("/main/quizzes/{slug}/{number}",
      *     name="currentQuestionPage",
      *     )
      */
@@ -67,7 +67,7 @@ class QuizeController extends Controller
     }
 
     /**
-     * @Route("/quizResults/{slug}",
+     * @Route("/main/quizResults/{slug}",
      *     name="QuizResults",
      *     )
      */

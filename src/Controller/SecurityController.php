@@ -26,12 +26,4 @@ class SecurityController extends Controller
             'error'         => $error,
         ));
     }
-
-    /**
-     * @Route("/login/forgotPassword", name="forgotPassword")
-     */
-    public function forgotPassword()
-    {
-        return $this->render('security/forgotPassword.html.twig');
-    }
 }
