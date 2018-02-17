@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use App\Entity\Result;
 
 /**
  * @ORM\Table(name="user")
@@ -174,10 +175,34 @@ class User implements UserInterface
     public function __construct()
     {
         $this->roles = ["ROLE_USER"];
+        $this->resultList = new ArrayCollection();
     }
 
     public function getRoles()
     {
         return $this->roles;
+    }
+
+    /**
+     * @ORM\OneToMany(targetEntity="Result", mappedBy="user")
+     * @ORM\JoinColumn(name="list_of_results", referencedColumnName="id")
+     *
+     */
+    private $resultList;
+
+    /**
+     * @return Collection|Result[]
+     */
+    public function getResultList()
+    {
+        return $this->resultList;
+    }
+
+    /**
+     * @param mixed $result
+     */
+    public function setResultList(Result $result): void
+    {
+        $this->resultList->add($result);
     }
 }

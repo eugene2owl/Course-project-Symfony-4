@@ -33,8 +33,8 @@
                     {% if loop.index == currentQuestionNumber %}
                         {% for answer in question.answerList %}
                             <li>
-                                <input id="{{ answer.getText }}" type="radio" name="select" value="{{ answer.getText }}">
-                                <label for="{{ answer.getText }}">{{ answer.getText }}</label>
+                                <input id="{{ loop.index }}" type="radio" name="select" class="radioButtons" value="{{ answer.getText }}" data-is-true="{{ answer.isTrue }}">
+                                <label for="{{ loop.index }}">{{ answer.getText }}</label>
                                 <div class="check"></div>
                             </li>
                         {% endfor %}
@@ -52,4 +52,6 @@
 
 {% block javascripts %}
     <script src="{{ asset('js/question.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{{ asset('js/ajax.js') }}"></script>
 {% endblock %}

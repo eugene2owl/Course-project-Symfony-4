@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use App\Entity\Question;
+use App\Entity\Result;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Flex\Response;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\QuizRepository")
@@ -62,10 +64,51 @@ class Quiz
      */
     private $questionList;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Result", mappedBy="quiz")
+     * @ORM\JoinColumn(name="list_of_results", referencedColumnName="id")
+     *
+     */
+    private $resultList;
+
     public function __construct()
     {
         $this->questionList = new ArrayCollection();
+        $this->resultList = new ArrayCollection();
     }
+
+    /**
+     * @return Collection|Question[]
+     */
+    public function getQuestionList()
+    {
+        return $this->questionList;
+    }
+
+    /**
+     * @param mixed $question
+     */
+    public function setQuestionList(Question $question): void
+    {
+        $this->questionList->add($question);
+    }
+
+    /**
+     * @return Collection|Result[]
+     */
+    public function getResultList()
+    {
+        return $this->resultList;
+    }
+
+    /**
+     * @param mixed $result
+     */
+    public function setResultList(Result $result): void
+    {
+        $this->resultList->add($result);
+    }
+
     /**
      * @return mixed
      */
@@ -168,21 +211,5 @@ class Quiz
     public function setThirdNameLider($thirdNameLider): void
     {
         $this->thirdNameLider = $thirdNameLider;
-    }
-
-    /**
-     * @return Collection|Question[]
-     */
-    public function getQuestionList()
-    {
-        return $this->questionList;
-    }
-
-    /**
-     * @param mixed $question
-     */
-    public function setQuestionList(Question $question): void
-    {
-        $this->questionList->add($question);
     }
 }

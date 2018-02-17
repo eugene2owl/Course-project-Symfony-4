@@ -42,6 +42,7 @@ class Question
     public function __construct(string $text)
     {
         $this->answerList = new ArrayCollection();
+        $this->resultList = new ArrayCollection();
         $this->text = $text;
     }
 
@@ -84,5 +85,28 @@ class Question
     public function getText()
     {
         return $this->text;
+    }
+
+    /**
+     * @ORM\OneToMany(targetEntity="Result", mappedBy="question")
+     * @ORM\JoinColumn(name="list_of_results", referencedColumnName="id")
+     *
+     */
+    private $resultList;
+
+    /**
+     * @return Collection|Result[]
+     */
+    public function getResultList()
+    {
+        return $this->resultList;
+    }
+
+    /**
+     * @param mixed $result
+     */
+    public function setResultList(Result $result): void
+    {
+        $this->resultList->add($result);
     }
 }

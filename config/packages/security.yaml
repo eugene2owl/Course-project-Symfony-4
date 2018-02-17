@@ -1,12 +1,10 @@
 security:
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         our_db_provider:
             entity:
                 class: App\Entity\User
                 property: username
     encoders:
-        #Symfony\Component\Security\Core\User\User: plaintext
         App\Entity\User: bcrypt
 
     firewalls:
@@ -19,11 +17,8 @@ security:
                 login_path: login
                 check_path: login
                 default_target_path: /main
-                failure_path: /login/forgotPassword
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+                failure_path: /login
 
-            # form_login: ~
-            # https://symfony.com/doc/current/security/form_login_setup.html
     access_control:
-        # require ROLE_ADMIN for /admin*
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+         - { path: ^/admin, roles: ROLE_ADMIN }
+         - { path: ^/main, roles: ROLE_USER }
