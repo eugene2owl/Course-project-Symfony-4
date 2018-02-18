@@ -1,6 +1,12 @@
 $(document).ready(function () {
+
+    var btn = document.querySelector('[type=submit]');
+    $('.radioButtons').click(function (e) {
+        btn.disabled = false;
+    });
+
    $('#questionList').submit(function (e) {
-        //e.preventDefault();
+        e.preventDefault();
 
         var data = $(this).serialize();
         console.log(data);
@@ -8,11 +14,28 @@ $(document).ready(function () {
             url: this.action,
             type: "POST",
             data: data,
-            dataType: 'html',
+            dataType: 'json',
             cache: false,
             success:function (response) {
-                showTruth(data);
-                //alert(data);
+
+                if (response['correctness']) {
+                        swal("Correct!", "", "success")
+                } else {
+                    swal("Not correct.", "", "warning");
+                }
+                if (response['toResultLink'] != "") {
+                    setTimeout(function () {
+                        document.location.href = response['toResultLink'];
+                    }, 1000);
+                } else {
+                    $('#questiontext')[0].innerHTML = response['number'] + ') ' + response['nextQuestion'];
+
+                    $('#questionList')[0].action = response['nextQuestionLink'];
+
+                    response['answers'].forEach(function (element, i) {
+                        $('#label' + (i + 1).toString())[0].innerHTML = element;
+                    });
+                }
             },
             error:function () {
                 alert('err');
@@ -21,50 +44,3 @@ $(document).ready(function () {
    }
    )
 });
-
-function showTruth(answerText) {
-    var radioArray = document.getElementsByClassName('radioButtons');
-    var currentButtonId = 0;
-    var currentButtonValue = "";
-    console.log(radioArray.length);
-    for (var radioNumber = 0; radioNumber < radioArray.length; radioNumber++) {
-        currentButtonId = radioArray[radioNumber].id;
-        currentButtonValue = radioArray[radioNumber].value;
-        console.log(currentButtonValue);
-        if ($('#' + currentButtonId).data('is-true')) {
-            console.log("true");
-        } else {
-            console.log("false");
-        }
-        answerText = convertSerializedToString(answerText);
-        console.log("answerText =" + answerText);
-        console.log("currentButtonValue =" + currentButtonValue);
-
-        if (answerText == currentButtonValue) {
-            if ($('#' + currentButtonId).data('is-true')) {
-                alert("true");
-            } else {
-                alert("false");
-            }
-        }
-    }
-
-    function convertSerializedToString(answerText)
-    {
-        answerText = answerText.split('%20').join(' ');
-        answerText = answerText.split('%40').join('@');
-        answerText = answerText.split('%23').join('#');
-        answerText = answerText.split('%24').join('$');
-        answerText = answerText.split('%25').join('%');
-        answerText = answerText.split('%5E').join('^');
-        answerText = answerText.split('%26').join('&');
-        answerText = answerText.split('%2B').join('+');
-        answerText = answerText.split('%5C').join('\\');
-        answerText = answerText.split('%7C').join('|');
-        answerText = answerText.split('%2F').join('/');
-        answerText = answerText.split('%2C').join(',');
-        answerText = answerText.split('%3F').join('?');
-        answerText = answerText.replace("select=", "");
-        return answerText;
-    }
-}

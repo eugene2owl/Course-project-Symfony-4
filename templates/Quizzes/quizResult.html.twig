@@ -13,6 +13,17 @@
 </head>
 <body>
     <h2 align="center">You have completed quiz {{ quizName }}</h2>
+    <h4>{{ questionsAmount }} questions</h4>
+    {% for name, amount in array %}
+        {% if loop.index < 4 %}
+            {{ name }} :
+            {{ amount }}
+            <br>
+        {% endif %}
+    {% endfor %}
+
+    {{ dump(array) }}
+    Your place is {{ userPlace }}
     <a href="http://symfony4.loc/main" class="btn btn-primary btn-block btn-success btn-lg">Go back to quizzes list</a>
 </body>
 </html>

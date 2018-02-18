@@ -15,33 +15,39 @@
 <body>
     <h1 align="center" id="mainHeader">List of quizzes</h1>
     <table class='table table-hover' width="300px">
-    {% if quizList is defined %}
-        <tr class="thead-dark">
-            <th>#</th>
-            <th>name</th>
-            <th>members count</th>
-            <th>status</th>
-            <th colspan="5">leader name</th>
+    <tr class="thead-dark">
+        <th>#</th>
+        <th>name</th>
+        <th>members count</th>
+        <th>status</th>
+        <th colspan="5">leader name</th>
+    </tr>
+    {% for key, quiz in quizList %}
+        <tr>
+            <td>{{ quiz.id }}</td>
+            <td>{{ quiz.quizname }}</td>
+            <td> {{ quiz.playersAmount }} </td>
+            <td>{{ quiz.status ? 'Enabled' : 'Disabled' }}</td>
+            <td> {{ quiz.firstNameLider }} </td>
+            <td> {{ quiz.secondNameLider }} </td>
+            <td> {{ quiz.thirdNameLider }} </td>
+            {% if quiz.status %}
+                <td> <a class="btn btn-primary btn-block btn-primary" href="http://symfony4.loc/main/quizzes/{{ quiz.quizname }}">Start</a> </td>
+                {% for key2, enabled in enabledArray %}
+                    {% if key2 == key %}
+                        {% if enabled %}
+                            <td> <a href="http://symfony4.loc/main/quizResults/{{ quiz.quizname }}" class="btn btn-primary btn-block btn-info btn-sm" >Watch results</a> </td>
+                        {% else %}
+                            <td> <a href="http://symfony4.loc/main/quizResults/{{ quiz.quizname }}" class="btn btn-primary btn-block btn-info btn-sm disabled" >Watch results</a> </td>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <td> <a class="btn btn-primary btn-block btn-primary disabled" href="">Start</a> </td>
+                <td> <a href="" class="btn btn-primary btn-block btn-info btn-sm disabled" >Watch results</a> </td>
+            {% endif %}
         </tr>
-        {% for quiz in quizList %}
-            <tr>
-                <td>{{ quiz.id }}</td>
-                <td>{{ quiz.quizname }}</td>
-                <td> {{ quiz.playersAmount }} </td>
-                <td>{{ quiz.status ? 'Enabled' : 'Disabled' }}</td>
-                <td> {{ quiz.firstNameLider }} </td>
-                <td> {{ quiz.secondNameLider }} </td>
-                <td> {{ quiz.thirdNameLider }} </td>
-                {% if quiz.status %}
-                    <td> <a class="btn btn-primary btn-block btn-primary" href="http://symfony4.loc/main/quizzes/{{ quiz.quizname }}">Start</a> </td>
-                    <td> <a href="" class="btn btn-primary btn-block btn-info btn-sm" >Watch results</a> </td>
-                {% else %}
-                    <td> <a class="btn btn-primary btn-block btn-primary disabled" href="http://symfony4.loc/main/quizzes/{{ quiz.quizname }}">Start</a> </td>
-                    <td> <a href="" class="btn btn-primary btn-block btn-info btn-sm disabled" >Watch results</a> </td>
-                {% endif %}
-            </tr>
-        {% endfor %}
-    {% endif %}
+    {% endfor %}
     </table>
 </body>
 </html>

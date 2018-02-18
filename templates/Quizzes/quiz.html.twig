@@ -21,28 +21,18 @@
     <form id='questionList' action="{{ nextQuestionLink }}">
         <div class="wrapper container">
             <div class="form-signin">
-                <h2 class="form-signin-heading">{{ currentQuestionNumber }}
-                {{ ")" }}
-                {% for question in quiz.questionList %}
-                    {% if loop.index == currentQuestionNumber %}
-                        {{ question.getText }}
-                    {% endif %}
-                {% endfor %}</h2>
+                <h2 class="form-signin-heading" id="questiontext">{{ currentQuestionNumber }}{{ ")" }}{{ questionText }}</h2>
                 <ul>
-                {% for question in quiz.questionList %}
-                    {% if loop.index == currentQuestionNumber %}
-                        {% for answer in question.answerList %}
-                            <li>
-                                <input id="{{ loop.index }}" type="radio" name="select" class="radioButtons" value="{{ answer.getText }}" data-is-true="{{ answer.isTrue }}">
-                                <label for="{{ loop.index }}">{{ answer.getText }}</label>
-                                <div class="check"></div>
-                            </li>
-                        {% endfor %}
-                    {% endif %}
-                {% endfor %}
+                    {% for answer in answers %}
+                    <li>
+                        <input id="{{ loop.index }}" type="radio" name="select" class="radioButtons" value="{{ loop.index }}">
+                        <label for="{{ loop.index }}" id="label{{ loop.index }}">{{ answer }}</label>
+                        <div class="check"></div>
+                    </li>
+                    {% endfor %}
                 </ul>
                 <br>
-                <input type='submit' form='questionList' value="button next" class="btn btn-lg btn-primary btn-block" disabled>
+                <input type='submit' form='questionList' value="button next" class="btn btn-lg btn-primary btn-block" disabled="not">
             </div>
         </div>
     </form>
@@ -51,7 +41,8 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('js/question.js') }}"></script>
+   {# <script src="{{ asset('js/question.js') }}"></script> #}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="{{ asset('js/ajax.js') }}"></script>
 {% endblock %}

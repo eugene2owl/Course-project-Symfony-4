@@ -18,8 +18,25 @@ class MainController extends Controller
     {
         $repository = $this->getDoctrine()->getRepository(Quiz::class);
         $arr = $repository->findAll();
+        $enabledArray = $this->findPassedQuizzes($arr);
         return $this->render('security/main.html.twig', array(
             'quizList' => $arr,
+            'enabledArray' => $enabledArray,
         ));
+    }
+
+    private function findPassedQuizzes(array $quizArray): array
+    {
+        $enabledArray = [];
+        for ($currentQuiz = 0; $currentQuiz < count($quizArray); $currentQuiz++) {
+            $isPassed = false;
+            foreach ($quizArray[$currentQuiz]->getResultList() as $quizResult) {
+                if ($quizResult->getUser() == $this->getUser()) {
+                    $isPassed = true;
+                }
+            }
+            $isPassed ? array_push($enabledArray, true) : array_push($enabledArray, false);
+        }
+        return $enabledArray;
     }
 }

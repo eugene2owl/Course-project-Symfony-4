@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Flex\Response;
 
 class QuizeController extends Controller
 {
@@ -21,61 +22,94 @@ class QuizeController extends Controller
      *     name="quizStart",
      *     )
      */
-    public function quizStart(Request $request,string $slug): RedirectResponse
+    public function quizStart(Request $request,string $slug)
     {
-        $currentQuestionNumber = 1;
-        return new RedirectResponse($slug."/".$currentQuestionNumber);
+        $repository = $this->getDoctrine()->getRepository(Quiz::class);
+        $arr = $repository->findBy(['quizname' => $slug]);
+        $currentQuiz = $arr[0];
+
+        $questionText = $currentQuiz->getQuestionList()[0]->getText();
+        $answersAmount = count($currentQuiz->getQuestionList()[0]->getAnswerList());
+
+        $nextQuestionLink = $this->generateUrl('nextQuestion', ['slug'=>$slug, 'number' => 1]);
+
+        $currentQuestion = $currentQuiz->getQuestionList()[0];
+        $answers = [];
+        if ($currentQuestion != null) {
+            foreach ($currentQuestion->getAnswerList() as $currentAnswer) {
+                array_push($answers, $currentAnswer->getText());
+            }
+        }
+
+        // Добавить проверку на последний отвеченный вопрос
+
+        return $this->render('Quizzes/quiz.html.twig', array(
+            'answers' => $answers,
+            'currentQuestionNumber' => 1,
+            'quiz' => $currentQuiz,
+            'questionText' => $questionText,
+            'nextQuestionLink' => $nextQuestionLink,
+            'answersAmount' => $answersAmount,
+        ));
     }
 
     /**
-     * @Route("/main/quizzes/{slug}/{number}",
-     *     name="currentQuestionPage",
+     * @Route("/main/quizzes/{slug}/ajax/{number}",
+     *     name="nextQuestion",
      *     )
      */
     public function ShowCurrentQuestionPage(Request $request,string $slug, int $number)
     {
         $repository = $this->getDoctrine()->getRepository(Quiz::class);
         $arr = $repository->findBy(['quizname' => $slug]);
-
         $currentQuiz = $arr[0];
+
+        $nextQuestionLink = $this->generateUrl('nextQuestion', ['slug'=>$slug, 'number' =>$number+1]);
+        $nextQuestionNumber = $number;
+        $nextQuestion = $currentQuiz->getQuestionList()[$nextQuestionNumber];
+
         $currentUser = $this->getUser();
         $currentQuiz = $this->addNewPlayer($currentQuiz, $currentUser);
 
-        $nextQuestionLink = $this->generateUrl('currentQuestionPage', ['slug'=>$slug, 'number' => $number+1]);
-
-        $currentQuestion = $currentQuiz->getQuestionList()[$number - 2];
-
-        $answerText = $request->get('select');
-        if ($answerText != null && $currentQuestion != null) {
-            $answerObj = $this->returnObjectAnswerByName($answerText, $currentQuiz, $number - 1);
-            $this->recognizeResult($currentQuiz, $currentUser, $currentQuestion, $answerObj);
+        $answers = [];
+        if ($nextQuestion != null) {
+            foreach ($nextQuestion->getAnswerList() as $currentAnswer) {
+                array_push($answers, $currentAnswer->getText());
+            }
         }
 
-        if (count($currentQuiz->getQuestionList()) > $number - 1) {
 
-            return $this->render('Quizzes/quiz.html.twig', array(
-                'currentQuestionNumber' => $number,
-                'quiz' => $currentQuiz,
-                'nextQuestionLink' => $nextQuestionLink,
-            ));
-        } else {
+        $numberAnswer = $request->get('select');
+        $answerObj = $this->returnObjectAnswerByName($numberAnswer, $currentQuiz, $number);
+        $currentQuestion = $currentQuiz->getQuestionList()[$nextQuestionNumber - 1];
+        $this->recognizeResult($currentQuiz, $currentUser, $currentQuestion, $answerObj);
+
+        $nextQuestionText = '';
+        if ($nextQuestion != null) {
+            $nextQuestionText = $nextQuestion->getText();
+        }
+        $response_data = array(
+            'number' => $number + 1,
+            'nextQuestion' => $nextQuestionText,
+            'nextQuestionLink' => $nextQuestionLink,
+            'answers' => $answers,
+            'correctness' => $answerObj->getisTrue(),
+            'toResultLink' => "",
+        );
+
+        if (!(count($currentQuiz->getQuestionList()) > $nextQuestionNumber)) {
             $toResultsLink = $this->generateUrl('QuizResults', ['slug'=>$slug]);
-            return new RedirectResponse($toResultsLink);
+            $response_data['toResultLink'] = $toResultsLink;
         }
+        return $this->json($response_data);
     }
 
     private function addNewPlayer(Quiz $quiz, User $user): Quiz
     {
-        $userAlreadyExist = false;
-        $repository = $this->getDoctrine()->getRepository(Result::class);
-        $resultsArray = $repository->findAll();
-        for ($resultNumber = 0; $resultNumber < count($resultsArray); $resultNumber++) {
-            if ($resultsArray[$resultNumber]->getQuiz() == $quiz &&
-                $resultsArray[$resultNumber]->getUser() == $user
-            ) {
-                $userAlreadyExist = true;
-            }
-        }
+        $em = $this->getDoctrine()->getManager();
+        $criteria = array('user' => $user->getId(), 'quiz' => $quiz->getId());
+        $result = $em->getRepository(Result::class)->findBy($criteria);
+        count($result) != 0 ? $userAlreadyExist = true : $userAlreadyExist = false;
         if (!$userAlreadyExist) {
             $quiz->setPlayersAmount($quiz->getPlayersAmount() + 1);
         }
@@ -109,15 +143,14 @@ class QuizeController extends Controller
         $em->flush();
     }
 
-    function returnObjectAnswerByName(string $textAnswer, Quiz $quiz, int $questionNumber): Answer
+    function returnObjectAnswerByName(string $numberAnswer, Quiz $quiz, int $questionNumber): Answer
     {
         $result = null;
-        $answersArray = $quiz->getQuestionList()[$questionNumber-1]->getAnswerList();
-        for ($questionNumber = 0; $questionNumber < count($answersArray); $questionNumber++) {
-            if ($answersArray[$questionNumber]->getText() == $textAnswer) {
-                $result = $answersArray[$questionNumber];
-                break;
-            }
+        $answersArray = $quiz->getQuestionList()[$questionNumber - 1]->getAnswerList();
+        foreach ($answersArray as $index =>$answer) {
+            if ($index == (int)$numberAnswer - 1) {
+                $result = $answer;
+            };
         }
         return $result;
     }
