@@ -23,11 +23,14 @@ $(document).ready(function () {
                 } else {
                     swal("Not correct.", "", "warning");
                 }
+
                 if (response['toResultLink'] != "") {
                     setTimeout(function () {
                         document.location.href = response['toResultLink'];
                     }, 1000);
                 } else {
+                    console.log(response['lastQuestion']);
+
                     $('#questiontext')[0].innerHTML = response['number'] + ') ' + response['nextQuestion'];
 
                     $('#questionList')[0].action = response['nextQuestionLink'];

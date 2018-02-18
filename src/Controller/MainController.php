@@ -30,10 +30,14 @@ class MainController extends Controller
         $enabledArray = [];
         for ($currentQuiz = 0; $currentQuiz < count($quizArray); $currentQuiz++) {
             $isPassed = false;
+            $amountOfPassedTasks = 0;
             foreach ($quizArray[$currentQuiz]->getResultList() as $quizResult) {
                 if ($quizResult->getUser() == $this->getUser()) {
-                    $isPassed = true;
+                    $amountOfPassedTasks++;
                 }
+            }
+            if ($amountOfPassedTasks == count($quizArray[$currentQuiz]->getQuestionList())) {
+                $isPassed = true;
             }
             $isPassed ? array_push($enabledArray, true) : array_push($enabledArray, false);
         }

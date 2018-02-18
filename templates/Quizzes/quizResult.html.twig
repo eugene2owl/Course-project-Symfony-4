@@ -7,24 +7,47 @@
     <meta charset="UTF-8">
     {% block stylesheets %}
         {{ parent() }}
-        <link href="{{ asset('css/main.css') }}" rel="stylesheet" />
+        <link href="{{ asset('css/results.css') }}" rel="stylesheet" />
     {% endblock %}
     <title>{% block title %}Results{% endblock %}</title>
 </head>
 <body>
-    <h2 align="center">You have completed quiz {{ quizName }}</h2>
-    <h4>{{ questionsAmount }} questions</h4>
-    {% for name, amount in array %}
-        {% if loop.index < 4 %}
-            {{ name }} :
-            {{ amount }}
-            <br>
-        {% endif %}
-    {% endfor %}
+    <div class="wrapper">
+        <div class="form-signin">
+            <h1>"{{ quizName }}" quiz</h1>
+            {% if amountOfPlayers > 2 %}
+                <h2>TOP - 3 best players</h2>
+            {% else %}
+                <h2>TOP - {{ amountOfPlayers }} best players</h2>
+            {% endif %}
 
-    {{ dump(array) }}
-    Your place is {{ userPlace }}
-    <a href="http://symfony4.loc/main" class="btn btn-primary btn-block btn-success btn-lg">Go back to quizzes list</a>
+            <br>
+            <br>
+            <table class="table table-sm">
+                <tr class="thead-dark">
+                    <th>Name</th>
+                    <th>City</th>
+                    <th>Result</th>
+                </tr>
+            {% for cityNumber, city in bestPlayersCities %}
+                {% for name, amountOfCorrectAnswers in assocArray %}
+                    {% if loop.index < 4 and loop.index == loop.parent.loop.index %}
+                        <tr>
+                            <td>{{ name }}</td>
+                            <td>{{ city }}</td>
+                            <td>{{ amountOfCorrectAnswers }} / {{ questionsAmount }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            </table>
+
+            <br>
+            <h2>You are at {{ userPlace }} position</h2>
+            <br>
+            <a href="http://symfony4.loc/main" class="btn btn-primary btn-block btn-success btn-lg">Go back to quizzes list</a>
+        </div>
+    </div>
 </body>
 </html>
 {% endblock %}

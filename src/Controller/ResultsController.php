@@ -37,12 +37,17 @@ class ResultsController extends Controller
             return $b - $a;
         });
         $userPlace = $this->findOutUserPlace($arrayUser_correctAnswersAmount);
+        $bestPlayersCities = $this->findOutBestPlayersCities($arrayUser_correctAnswersAmount);
+
+        $this->recognizeBestPlayer($arrayUser_correctAnswersAmount, $currentQuiz);
         return $this->render('Quizzes/quizResult.html.twig', array(
             'quizName' => $currentQuiz->getQuizName(),
-            'array' => $arrayUser_correctAnswersAmount,
+            'assocArray' => $arrayUser_correctAnswersAmount,
+            'amountOfPlayers' => count($arrayUser_correctAnswersAmount),
             'currentQuizResults' => $currentQuizResults,
             'questionsAmount' => $questionsAmount,
             'userPlace' => $userPlace,
+            'bestPlayersCities' => $bestPlayersCities,
         ));
     }
 
@@ -71,5 +76,38 @@ class ResultsController extends Controller
                 return $key + 1;
             }
         }
+        return -1;
+    }
+
+    public function findOutBestPlayersCities(array $arrayUser_correctAnswersAmount): array
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $bestPlayersCities = [];
+        foreach (array_keys($arrayUser_correctAnswersAmount) as $number =>$username) {
+            if ($number < 4) {
+                $criteria = array('username' => $username);
+                $arr = $em->getRepository(User::class)->findBy($criteria);
+                array_push($bestPlayersCities, $arr[0]->getcity());
+            }
+        }
+        return $bestPlayersCities;
+    }
+
+    private function recognizeBestPlayer(array $arrayUser_correctAnswersAmount, Quiz $quiz): void
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $username = array_keys($arrayUser_correctAnswersAmount)[0];
+        $criteria = array('username' => $username);
+        $arr = $em->getRepository(User::class)->findBy($criteria);
+        $user = $arr[0];
+
+        $quiz->setFirstNameLider($user->getFirstname());
+        $quiz->setSecondNameLider($user->getSecondname());
+        $quiz->setThirdNameLider($user->getThirdname());
+
+        $em->persist($quiz);
+        $em->flush();
     }
 }

@@ -10,8 +10,3 @@ form.addEventListener('change', function() {
 $('.radioButtons').onclick(function (e) {
         alert('d');
 })
-
-
-
-
-

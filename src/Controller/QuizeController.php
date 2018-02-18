@@ -1,9 +1,6 @@
 <?php
-
 declare(strict_types=1);
-
 namespace App\Controller;
-
 use App\Entity\Answer;
 use App\Entity\Question;
 use App\Entity\Quiz;
@@ -14,7 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Flex\Response;
-
 class QuizeController extends Controller
 {
     /**
@@ -28,29 +24,39 @@ class QuizeController extends Controller
         $arr = $repository->findBy(['quizname' => $slug]);
         $currentQuiz = $arr[0];
 
-        $questionText = $currentQuiz->getQuestionList()[0]->getText();
-        $answersAmount = count($currentQuiz->getQuestionList()[0]->getAnswerList());
+        define('CURRENT_QUESTION_PAGE', $this->findOutCurrentQuestionPage($currentQuiz));
 
-        $nextQuestionLink = $this->generateUrl('nextQuestion', ['slug'=>$slug, 'number' => 1]);
-
-        $currentQuestion = $currentQuiz->getQuestionList()[0];
+        $questionText = $currentQuiz->getQuestionList()[CURRENT_QUESTION_PAGE - 1]->getText();
+        $answersAmount = count($currentQuiz->getQuestionList()[CURRENT_QUESTION_PAGE - 1]->getAnswerList());
+        $nextQuestionLink = $this->generateUrl('nextQuestion', ['slug'=>$slug, 'number' => CURRENT_QUESTION_PAGE]);
+        $currentQuestion = $currentQuiz->getQuestionList()[CURRENT_QUESTION_PAGE - 1];
         $answers = [];
         if ($currentQuestion != null) {
             foreach ($currentQuestion->getAnswerList() as $currentAnswer) {
                 array_push($answers, $currentAnswer->getText());
             }
         }
-
         // Добавить проверку на последний отвеченный вопрос
-
         return $this->render('Quizzes/quiz.html.twig', array(
             'answers' => $answers,
-            'currentQuestionNumber' => 1,
+            'currentQuestionNumber' => CURRENT_QUESTION_PAGE,
             'quiz' => $currentQuiz,
             'questionText' => $questionText,
             'nextQuestionLink' => $nextQuestionLink,
             'answersAmount' => $answersAmount,
         ));
+    }
+
+    private function findOutCurrentQuestionPage(Quiz $quiz): int
+    {
+        $em = $this->getDoctrine()->getManager();
+        $criteria = array('user' => $this->getUser()->getId(), 'quiz' => $quiz->getId());
+        $result = $em->getRepository(Result::class)->findBy($criteria);
+        $CurrentQuestionPage = 1;
+        if (count($result) < count($quiz->getQuestionList())) {
+            $CurrentQuestionPage = count($result) + 1;
+        }
+        return $CurrentQuestionPage;
     }
 
     /**
@@ -63,27 +69,21 @@ class QuizeController extends Controller
         $repository = $this->getDoctrine()->getRepository(Quiz::class);
         $arr = $repository->findBy(['quizname' => $slug]);
         $currentQuiz = $arr[0];
-
         $nextQuestionLink = $this->generateUrl('nextQuestion', ['slug'=>$slug, 'number' =>$number+1]);
         $nextQuestionNumber = $number;
         $nextQuestion = $currentQuiz->getQuestionList()[$nextQuestionNumber];
-
         $currentUser = $this->getUser();
         $currentQuiz = $this->addNewPlayer($currentQuiz, $currentUser);
-
         $answers = [];
         if ($nextQuestion != null) {
             foreach ($nextQuestion->getAnswerList() as $currentAnswer) {
                 array_push($answers, $currentAnswer->getText());
             }
         }
-
-
         $numberAnswer = $request->get('select');
         $answerObj = $this->returnObjectAnswerByName($numberAnswer, $currentQuiz, $number);
         $currentQuestion = $currentQuiz->getQuestionList()[$nextQuestionNumber - 1];
         $this->recognizeResult($currentQuiz, $currentUser, $currentQuestion, $answerObj);
-
         $nextQuestionText = '';
         if ($nextQuestion != null) {
             $nextQuestionText = $nextQuestion->getText();
@@ -96,7 +96,6 @@ class QuizeController extends Controller
             'correctness' => $answerObj->getisTrue(),
             'toResultLink' => "",
         );
-
         if (!(count($currentQuiz->getQuestionList()) > $nextQuestionNumber)) {
             $toResultsLink = $this->generateUrl('QuizResults', ['slug'=>$slug]);
             $response_data['toResultLink'] = $toResultsLink;
@@ -119,22 +118,15 @@ class QuizeController extends Controller
     private function recognizeResult(Quiz $currentQuiz, User $user, Question $question, Answer $answer): void
     {
         $result = $this->createNewOrReplaceExistingResult($currentQuiz, $user, $question);
-
-
         $result->setQuiz($currentQuiz);
         $currentQuiz->setResultList($result);
-
         $result->setUser($user);
         $user->setResultList($result);
-
         $result->setQuestion($question);
         $question->setResultList($result);
-
         $result->setAnswer($answer);
         $answer->setResultList($result);
-
         $em = $this->getDoctrine()->getManager();
-
         $em->persist($currentQuiz);
         $em->persist($user);
         $em->persist($question);
