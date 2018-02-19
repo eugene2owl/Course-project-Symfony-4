@@ -17,6 +17,11 @@ class SecurityController extends Controller
      */
     public function login(Request $request, AuthenticationUtils $authUtils)
     {
+        if($this->getUser() != null) {
+            $toMainLink = $this->generateUrl('main');
+            return $this->redirect($toMainLink);
+        }
+        session_destroy();
         $error = $authUtils->getLastAuthenticationError();
 
         $lastUsername = $authUtils->getLastUsername();

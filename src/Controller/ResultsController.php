@@ -56,16 +56,29 @@ class ResultsController extends Controller
         $arrayUser_correctAnswersAmount = [];
         foreach ($currentQuizResults as $result) {
             $currentUser = $result->getUser()->getUsername();
-            $arrayUser_correctAnswersAmount[$currentUser] = 0;
+            if ($this->didUserPassQuiz($result->getUser(), $result->getQuiz())) {
+                $arrayUser_correctAnswersAmount[$currentUser] = 0;
+            }
         }
         foreach ($currentQuizResults as $result) {
             $currentUser = $result->getUser()->getUsername();
-            $currentResultCorrectness = $result->getAnswer()->getisTrue();
-            if ($currentResultCorrectness) {
-                $arrayUser_correctAnswersAmount[$currentUser]++;
+            if ($this->didUserPassQuiz($result->getUser(), $result->getQuiz())) {
+                $currentResultCorrectness = $result->getAnswer()->getisTrue();
+                if ($currentResultCorrectness) {
+                    $arrayUser_correctAnswersAmount[$currentUser]++;
+                }
             }
         }
         return $arrayUser_correctAnswersAmount;
+    }
+
+    private function didUserPassQuiz(User $user, Quiz $quiz): bool
+    {
+        $em = $this->getDoctrine()->getManager();
+        $criteria = array('quiz' => $quiz->getId(), 'user' => $user->getId());
+        $passedQuestionsOfCurrentUser = $em->getRepository(Result::class)->findBy($criteria);
+        count($passedQuestionsOfCurrentUser) == count($quiz->getQuestionList()) ? $didPass = true : $didPass = false;
+        return $didPass;
     }
 
     private function findOutUserPlace(array $arrayUser_correctAnswersAmount): int

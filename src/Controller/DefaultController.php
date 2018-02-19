@@ -15,6 +15,7 @@ class DefaultController extends Controller
       */
     public function index()
     {
+
         return $this->render('security/home.html.twig');
     }
 }

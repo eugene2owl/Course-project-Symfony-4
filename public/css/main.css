@@ -6,3 +6,9 @@ table {
     font-weight: bold;
     font-size: 45px;
 }
+
+#logout {
+    font-size: 20px;
+    position: absolute;
+    left:1750px;
+}
