@@ -82,7 +82,7 @@ class Answer
      */
     private $question;
 
-    public function getQuestion(): Question
+    public function MYgetQuestion(): Question
     {
         return $this->question;
     }
@@ -102,7 +102,7 @@ class Answer
     /**
      * @return Collection|Result[]
      */
-    public function getResultList()
+    public function MYgetResultList()
     {
         return $this->resultList;
     }
@@ -113,5 +113,10 @@ class Answer
     public function setResultList(Result $result): void
     {
         $this->resultList->add($result);
+    }
+
+    public function __toString(): string
+    {
+        return $this->text;
     }
 }

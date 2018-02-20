@@ -209,7 +209,7 @@ class User implements UserInterface
     /**
      * @return Collection|Result[]
      */
-    public function getResultList()
+    public function MYgetResultList()
     {
         return $this->resultList;
     }
@@ -220,5 +220,31 @@ class User implements UserInterface
     public function setResultList(Result $result): void
     {
         $this->resultList->add($result);
+    }
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+//         return serialize(array(
+//             $this->id,
+//             $this->username,
+//             $this->password,
+//             $this->plainPassword,
+//         ));
+    }
+    /** @see \Serializable::unserialize() */
+    public function deserialize($serialized)
+    {
+//        list (
+//            $this->id,
+//            $this->username,
+//            $this->password,
+//            $this->plainPassword,
+//            ) = deserialize($serialized);
+    }
+
+    public function __toString(): string
+    {
+        return $this->username;
     }
 }

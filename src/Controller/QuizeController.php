@@ -1,6 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Controller;
+
 use App\Entity\Answer;
 use App\Entity\Question;
 use App\Entity\Quiz;
@@ -36,7 +39,6 @@ class QuizeController extends Controller
                 array_push($answers, $currentAnswer->getText());
             }
         }
-        // Добавить проверку на последний отвеченный вопрос
         return $this->render('Quizzes/quiz.html.twig', array(
             'answers' => $answers,
             'currentQuestionNumber' => CURRENT_QUESTION_PAGE,

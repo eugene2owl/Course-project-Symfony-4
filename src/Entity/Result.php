@@ -16,6 +16,11 @@ class Result
      */
     private $id;
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Quiz", inversedBy="resultList")
      * @ORM\JoinColumn(nullable=true)
@@ -78,5 +83,15 @@ class Result
     public function setAnswer(Answer $answer)
     {
         $this->answer = $answer;
+    }
+
+    public function __toString(): string
+    {
+        $string = $this->getUser()->getUsername();
+        $string .= " in " . $this->quiz->getQuizname();
+        $string .= " on " . $this->getQuestion()->getText();
+        $string .= " answered " . $this->getAnswer()->getText();
+        $this->getAnswer()->getisTrue() ? $string .= " (correct) " : $string .= " (wrong) ";
+        return $string;
     }
 }

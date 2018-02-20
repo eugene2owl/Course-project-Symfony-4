@@ -1,0 +1,23 @@
+table {
+    font-size: 20px;
+}
+
+#mainHeader {
+    font-weight: bold;
+    font-size: 45px;
+}
+
+#logout {
+    font-size: 20px;
+    position: absolute;
+    left:1750px;
+}
+
+a {
+    margin: 15px 5px;
+}
+
+#div1 {
+    width: 100px;
+    height: 20px;
+}

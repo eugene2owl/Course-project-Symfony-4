@@ -31,7 +31,7 @@ class MainController extends Controller
         for ($currentQuiz = 0; $currentQuiz < count($quizArray); $currentQuiz++) {
             $isPassed = false;
             $amountOfPassedTasks = 0;
-            foreach ($quizArray[$currentQuiz]->getResultList() as $quizResult) {
+            foreach ($quizArray[$currentQuiz]->MYgetResultList() as $quizResult) {
                 if ($quizResult->getUser() == $this->getUser()) {
                     $amountOfPassedTasks++;
                 }

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Question;
 use App\Entity\Result;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -96,7 +97,7 @@ class Quiz
     /**
      * @return Collection|Result[]
      */
-    public function getResultList()
+    public function MYgetResultList()
     {
         return $this->resultList;
     }
@@ -211,5 +212,10 @@ class Quiz
     public function setThirdNameLider($thirdNameLider): void
     {
         $this->thirdNameLider = $thirdNameLider;
+    }
+
+    public function __toString(): string
+    {
+        return $this->quizname;
     }
 }

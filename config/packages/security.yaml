@@ -18,7 +18,11 @@ security:
                 check_path: login
                 default_target_path: /main
                 failure_path: /login
+            logout:
+                path:   /logout
+                target: /
 
     access_control:
          - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: ^/main, roles: ROLE_USER }
+         #- { path: ^/$, roles: ROLE_ANONIMYS }
