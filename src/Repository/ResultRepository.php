@@ -13,16 +13,16 @@ class ResultRepository extends ServiceEntityRepository
         parent::__construct($registry, Result::class);
     }
 
-    /*
-    public function findBySomething($value)
+    public function findAllLike($text): array
     {
-        return $this->createQueryBuilder('r')
-            ->where('r.something = :value')->setParameter('value', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $em = $this->getEntityManager();
+
+        $query = $em->createQuery(
+            'SELECT p
+        FROM App\Entity\Result p
+        WHERE p.id LIKE :text'
+        )->setParameter('text', ("%".$text."%"));
+
+        return $query->execute();
     }
-    */
 }

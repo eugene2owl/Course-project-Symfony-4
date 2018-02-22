@@ -1,13 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Quiz;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\QuizRepository;
 
 class MainController extends Controller
 {
@@ -19,9 +18,13 @@ class MainController extends Controller
         $repository = $this->getDoctrine()->getRepository(Quiz::class);
         $arr = $repository->findAll();
         $enabledArray = $this->findPassedQuizzes($arr);
+        $toQuizLink = 'http://symfony4.loc/main/quizzes/';
+        $toQuizResultLink = 'http://symfony4.loc/main/quizResults/';
         return $this->render('security/main.html.twig', array(
             'quizList' => $arr,
             'enabledArray' => $enabledArray,
+            'toQuizLink' => $toQuizLink,
+            'toQuizResultLink' => $toQuizResultLink,
         ));
     }
 

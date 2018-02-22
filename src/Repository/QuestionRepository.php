@@ -13,16 +13,17 @@ class QuestionRepository extends ServiceEntityRepository
         parent::__construct($registry, Question::class);
     }
 
-    /*
-    public function findBySomething($value)
+    public function findAllLike($text): array
     {
-        return $this->createQueryBuilder('q')
-            ->where('q.something = :value')->setParameter('value', $value)
-            ->orderBy('q.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $em = $this->getEntityManager();
+
+        $query = $em->createQuery(
+            'SELECT p
+        FROM App\Entity\Question p
+        WHERE p.text LIKE :text OR 
+        p.id LIKE :text'
+        )->setParameter('text', ("%".$text."%"));
+
+        return $query->execute();
     }
-    */
 }

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Form\UserType;
@@ -15,7 +18,7 @@ class RegistrationController extends Controller
      */
     public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        if($this->getUser() != null) {
+        if ($this->getUser() != null) {
             $toMainLink = $this->generateUrl('main');
             return $this->redirect($toMainLink);
         }
@@ -35,10 +38,12 @@ class RegistrationController extends Controller
             $toMainLink = $this->generateUrl('main');
             return $this->redirect($toMainLink);
         }
-
-        return $this->render(
-            'registration/register.html.twig',
-            array('form' => $form->createView())
+        $formView = $form->createView();
+        $toLoginLink = $this->generateUrl('login');
+        return $this->render('registration/register.html.twig', [
+                'toLoginLink' => $toLoginLink,
+                'form' => $formView
+            ]
         );
     }
 }

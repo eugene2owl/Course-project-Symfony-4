@@ -9,15 +9,37 @@
     {% block stylesheets %}
         {{ parent() }}
         <link href="{{ asset('css/admin.css') }}" rel="stylesheet" />
-    {% endblock %}
+        {% endblock %}
     <title>{% block title %}Admin page{% endblock %}</title>
 </head>
 <body>
-    <a class="btn btn-lg btn-default" id="userButton" href="{{ toQuizzesTableLink }}">Quiz</a>
-    <a class="btn btn-lg btn-default" id="userButton" href="{{ toQuestionTableLink }}">Question</a>
-    <a class="btn btn-lg btn-default" id="userButton" href="{{ toAnswerTableLink }}">Answer</a>
-    <a class="btn btn-lg btn-default" id="userButton" href="{{ toResultTableLink }}">Result</a>
-    <a class="btn btn-lg btn-default" id="userButton" href="{{ toUserTableLink }}">User</a>
+    <div id="entityOptions">
+        <a class="btn btn-lg btn-default" id="quizButton" href="{{ toQuizzesTableLink }}">Quiz</a>
+        <a class="btn btn-lg btn-default" id="questionButton" href="{{ toQuestionTableLink }}">Question</a>
+        <a class="btn btn-lg btn-default" id="answerButton" href="{{ toAnswerTableLink }}">Answer</a>
+        <a class="btn btn-lg btn-default" id="resultButton" href="{{ toResultTableLink }}">Result</a>
+        <a class="btn btn-lg btn-default" id="userButton" href="{{ toUserTableLink }}">User</a>
+    </div>
+
+    <input type="text" id="filter" class="form-control" placeholder="find...">
+    
+    <p id="sortOptions">
+        <label class="custom-control custom-radio" >
+            <input id="option2" type="radio" name="radio" value="id" class="custom-control-input radio" checked>
+            <span class="custom-control-indicator"></span>
+            <span class="custom-control-description">Id</span>
+        </label>
+        <label class="custom-control custom-radio">
+            <input id="option1" type="radio" name="radio" value="name" class="custom-control-input radio">
+            <span class="custom-control-indicator"></span>
+            <span class="custom-control-description">Name</span>
+        </label>
+        <label class="custom-control custom-radio" >
+            <input id="option3" type="radio" name="radio" value="username" class="custom-control-input radio">
+            <span class="custom-control-indicator"></span>
+            <span class="custom-control-description">Username</span>
+        </label>
+    </p>
     <div id=”entities-grid”></div>
 </body>
 </html>

@@ -1,24 +1,88 @@
 $(document).ready(function () {
-
-    $('.btn').click(function (e) {
+    $('.btn').click(function(e) {
         e.preventDefault();
-
-        var data = '';
+        recognizeLastButton(this);
+        let data = [setSortData(findOutSortedColomn())];
+        data.push(setFilterData(findOutFilterData()));
+        data = {'data' : data};
         $.ajax({
             url: this.href,
             type: "POST",
             data: data,
             dataType: 'json',
             cache: false,
-            success:function (response) {
-                updatePanel(response);
-            },
-            error:function () {
-                alert('err');
-            }
+            success: success,
+            error: error,
         });
+    });
+
+    $('.radio').change(function() {
+        $('.last').click();
+    });
+
+    $('#filter').keyup(function () {
+        $('.last').click();
     })
 });
+
+function recognizeLastButton(checkedButton)
+{
+    const defaultClass = 'btn btn-lg btn-default';
+    let buttons = document.getElementsByClassName('btn');
+    for (let buttonNumber = 0; buttonNumber < buttons.length; buttonNumber++) {
+        buttons[buttonNumber].className = defaultClass;
+    }
+    checkedButton.className += " last";
+}
+
+function setSortData(checkedValue) {
+    let data;
+    switch (checkedValue) {
+        case 'name':
+            data = {'sortbyfield': 'name'};
+            break;
+        case 'id':
+            data = {'sortbyfield': 'id'};
+            break;
+        case 'username':
+            data = {'sortbyfield': 'username'};
+            break;
+        default:
+            data = "";
+    }
+    return data;
+}
+
+function findOutSortedColomn() {
+    let radios = document.getElementsByTagName('input');
+    let value = "";
+    for (let i = 0; i < radios.length; i++) {
+        if (radios[i].type === 'radio' && radios[i].checked) {
+            value = radios[i].value;
+        }
+    }
+    return value;
+}
+
+function setFilterData(text) {
+    let data = {'pattern': ""};
+    if (text !== "") {
+        data = {'pattern': text};
+    }
+    return data;
+}
+
+function findOutFilterData() {
+    return document.getElementById('filter').value;
+}
+
+function error(response) {
+    //alert('err');
+}
+
+function success(response) {
+    updatePanel(response);
+}
 
 function updatePanel(response)
 {
@@ -45,7 +109,7 @@ function makeTable(header, dataRows)
     dataRows.forEach(function (row) {
         myTable.appendChild(row);
     });
-    myTable.setAttribute('border', '2');
+    myTable.setAttribute('class', 'table');
     return myTable;
 }
 
@@ -65,10 +129,16 @@ function makeHeaderRow(assocArray)
     headerArray.forEach(function (text) {
         headerTagArray.push(makeCell(text, true));
     });
+    let currentHeader = 0;
     let headerRow = document.createElement('tr');
     headerTagArray.forEach(function (th) {
+        if (currentHeader == 1) {
+            th.setAttribute('id', 'header2');
+        }
        headerRow.appendChild(th);
+       currentHeader++;
     });
+    headerRow.setAttribute('class', 'thead-dark');
     return headerRow;
 }
 

@@ -33,19 +33,19 @@
             <td> {{ quiz.secondNameLider }} </td>
             <td> {{ quiz.thirdNameLider }} </td>
             {% if quiz.status %}
-                <td> <a class="btn btn-primary btn-block btn-primary" href="http://symfony4.loc/main/quizzes/{{ quiz.quizname }}">Start</a> </td>
+                <td> <a class="btn btn-primary btn-block btn-primary" href="{{ toQuizLink }}{{ quiz.quizname }}">Start</a> </td>
                 {% for key2, enabled in enabledArray %}
                     {% if key2 == key %}
                         {% if enabled %}
-                            <td> <a href="http://symfony4.loc/main/quizResults/{{ quiz.quizname }}" class="btn btn-primary btn-block btn-info btn-sm" >Watch results</a> </td>
+                            <td> <a href="{{ toQuizResultLink }}{{ quiz.quizname }}" class="btn btn-primary btn-block btn-info btn-sm" >Watch results</a> </td>
                         {% else %}
-                            <td> <a href="http://symfony4.loc/main/quizResults/{{ quiz.quizname }}" class="btn btn-primary btn-block btn-info btn-sm disabled" >Watch results</a> </td>
+                            <td> <a href="{{ toQuizResultLink }}{{ quiz.quizname }}" class="btn btn-primary btn-block btn-info btn-sm disabled" >Watch results</a> </td>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
             {% else %}
-                <td> <a class="btn btn-primary btn-block btn-primary disabled" href="">Start</a> </td>
-                <td> <a href="" class="btn btn-primary btn-block btn-info btn-sm disabled" >Watch results</a> </td>
+                <!--td> <a class="btn btn-primary btn-block btn-primary disabled" href="">Start</a> </td>
+                <td> <a href="" class="btn btn-primary btn-block btn-info btn-sm disabled" >Watch results</a> </td-->
             {% endif %}
         </tr>
     {% endfor %}

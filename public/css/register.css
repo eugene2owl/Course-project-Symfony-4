@@ -14,3 +14,7 @@ body {
     background-color: #fff;
     border: 1px solid rgba(0, 0, 0, 0.1)
 }
+
+html {
+    font-size: 20px;
+}

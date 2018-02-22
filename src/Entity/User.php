@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -86,8 +87,6 @@ class User implements UserInterface
     private $plainPassword;
 
     /**
-     * The below length depends on the "algorithm" you use for encoding
-     * the password, but this works well with bcrypt.
      *
      * @ORM\Column(type="string", length=64)
      */
@@ -225,22 +224,24 @@ class User implements UserInterface
     /** @see \Serializable::serialize() */
     public function serialize()
     {
-//         return serialize(array(
-//             $this->id,
-//             $this->username,
-//             $this->password,
-//             $this->plainPassword,
-//         ));
+         return serialize(array(
+             $this->id,
+             $this->username,
+             $this->password,
+             $this->plainPassword,
+         ));
     }
+
     /** @see \Serializable::unserialize() */
-    public function deserialize($serialized)
+    public function unserialize($serialized)
     {
-//        list (
-//            $this->id,
-//            $this->username,
-//            $this->password,
-//            $this->plainPassword,
-//            ) = deserialize($serialized);
+        list (
+            $this->id,
+            $this->username,
+            $this->password,
+            // see section on salt below
+            // $this->salt
+            ) = unserialize($serialized);
     }
 
     public function __toString(): string

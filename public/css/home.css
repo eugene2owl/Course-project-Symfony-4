@@ -1,8 +1,13 @@
 #mainHeader {
     font-weight: bold;
     font-size: 45px;
+    margin-top: 20px;
 }
 
 #toolbar {
-    margin-left: 1500px;
+    margin-left: 1300px;
+}
+
+html {
+    font-size: 17px;
 }

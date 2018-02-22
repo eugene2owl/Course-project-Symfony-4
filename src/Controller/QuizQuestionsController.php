@@ -7,13 +7,8 @@ namespace App\Controller;
 use App\Entity\Answer;
 use App\Entity\Question;
 use App\Entity\Quiz;
-use App\Form\QuizType;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\QuizRepository;
 use Symfony\Component\HttpFoundation\Response;
 
 class QuizQuestionsController extends Controller
@@ -24,7 +19,7 @@ class QuizQuestionsController extends Controller
     public function index()
     {
         $quiz = new Quiz();
-        $quiz->setQuizname("Cities");
+        $quiz->setQuizname("Colors");
         $quiz->setPlayersAmount(0);
         $quiz->setStatus(1);
         $quiz->setFirstNameLider("Test");
@@ -32,22 +27,22 @@ class QuizQuestionsController extends Controller
         $quiz->setThirdNameLider("Test3");
 
 
-        $question = new Question("What is a capital of Great Britain?");
-        $question1 = new Question("Minsk is a capital of ...?");
-        $question2 = new Question("What is a second capital of Russia?");
+        $question = new Question("What is a color of sunset?");
+        $question1 = new Question("What is a color o chameleon?");
+        $question2 = new Question("What are the colors of Canada flag?");
 
 
-        $answer1question1 = new Answer("London", 1);
-        $answer2question1 = new Answer("Minsk", 0);
-        $answer3question1 = new Answer("Moscow", 0);
+        $answer1question1 = new Answer("Blue", 0);
+        $answer2question1 = new Answer("White", 0);
+        $answer3question1 = new Answer("Red", 1);
 
-        $answer1question2 = new Answer("Russia", 1);
-        $answer2question2 = new Answer("Belarus", 0);
-        $answer3question2 = new Answer("UK", 0);
+        $answer1question2 = new Answer("Green", 0);
+        $answer2question2 = new Answer("Random", 0);
+        $answer3question2 = new Answer("Color of it's environment", 1);
 
-        $answer1question3 = new Answer("Moscow", 0);
-        $answer2question3 = new Answer("Grodno", 0);
-        $answer3question3 = new Answer("Saint Petersburg", 1);
+        $answer1question3 = new Answer("Red and white", 0);
+        $answer2question3 = new Answer("Red", 0);
+        $answer3question3 = new Answer("White and black", 1);
 
 
         $question->setQuiz($quiz);

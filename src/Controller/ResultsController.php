@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Answer;
-use App\Entity\Question;
 use App\Entity\Quiz;
 use App\Entity\Result;
 use App\Entity\User;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +18,7 @@ class ResultsController extends Controller
      *     name="QuizResults",
      *     )
      */
-    public function ShowQuizResults(Request $request, $slug)
+    public function showQuizResults(string $slug)
     {
         $em = $this->getDoctrine()->getManager();
         $criteria = array('quizname' => $slug);
@@ -33,11 +30,13 @@ class ResultsController extends Controller
         $criteria = array('quiz' => $currentQuiz->getId());
         $currentQuizResults = $em->getRepository(Result::class)->findBy($criteria);
         $arrayUser_correctAnswersAmount = $this->getUsersOfCurrentQuiz($currentQuizResults);
-        uasort($arrayUser_correctAnswersAmount, function($a, $b) {
+        uasort($arrayUser_correctAnswersAmount, function ($a, $b) {
             return $b - $a;
         });
         $userPlace = $this->findOutUserPlace($arrayUser_correctAnswersAmount);
         $bestPlayersCities = $this->findOutBestPlayersCities($arrayUser_correctAnswersAmount);
+
+        $toMainLink = $this->generateUrl('main');
 
         $this->recognizeBestPlayer($arrayUser_correctAnswersAmount, $currentQuiz);
         return $this->render('Quizzes/quizResult.html.twig', array(
@@ -48,6 +47,7 @@ class ResultsController extends Controller
             'questionsAmount' => $questionsAmount,
             'userPlace' => $userPlace,
             'bestPlayersCities' => $bestPlayersCities,
+            'toMainLink' => $toMainLink,
         ));
     }
 
@@ -97,7 +97,7 @@ class ResultsController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $bestPlayersCities = [];
-        foreach (array_keys($arrayUser_correctAnswersAmount) as $number =>$username) {
+        foreach (array_keys($arrayUser_correctAnswersAmount) as $number => $username) {
             if ($number < 4) {
                 $criteria = array('username' => $username);
                 $arr = $em->getRepository(User::class)->findBy($criteria);

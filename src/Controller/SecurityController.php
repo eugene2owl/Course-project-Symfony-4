@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 
@@ -15,9 +14,9 @@ class SecurityController extends Controller
     /**
      * @Route("/login", name="login")
      */
-    public function login(Request $request, AuthenticationUtils $authUtils)
+    public function login(AuthenticationUtils $authUtils)
     {
-        if($this->getUser() != null) {
+        if ($this->getUser() != null) {
             $toMainLink = $this->generateUrl('main');
             return $this->redirect($toMainLink);
         }
@@ -26,7 +25,9 @@ class SecurityController extends Controller
 
         $lastUsername = $authUtils->getLastUsername();
 
+        $toRegistrationLink = $this->generateUrl('user_registration');
         return $this->render('security/login.html.twig', array(
+            'toRegistrationLink' => $toRegistrationLink,
             'last_username' => $lastUsername,
             'error'         => $error,
         ));

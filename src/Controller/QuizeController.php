@@ -9,11 +9,10 @@ use App\Entity\Question;
 use App\Entity\Quiz;
 use App\Entity\Result;
 use App\Entity\User;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Flex\Response;
+
 class QuizeController extends Controller
 {
     /**
@@ -21,7 +20,7 @@ class QuizeController extends Controller
      *     name="quizStart",
      *     )
      */
-    public function quizStart(Request $request,string $slug)
+    public function quizStart(string $slug)
     {
         $repository = $this->getDoctrine()->getRepository(Quiz::class);
         $arr = $repository->findBy(['quizname' => $slug]);
@@ -66,7 +65,7 @@ class QuizeController extends Controller
      *     name="nextQuestion",
      *     )
      */
-    public function ShowCurrentQuestionPage(Request $request,string $slug, int $number)
+    public function showCurrentQuestionPage(Request $request, string $slug, int $number)
     {
         $repository = $this->getDoctrine()->getRepository(Quiz::class);
         $arr = $repository->findBy(['quizname' => $slug]);
@@ -137,11 +136,11 @@ class QuizeController extends Controller
         $em->flush();
     }
 
-    function returnObjectAnswerByName(string $numberAnswer, Quiz $quiz, int $questionNumber): Answer
+    private function returnObjectAnswerByName(string $numberAnswer, Quiz $quiz, int $questionNumber): Answer
     {
         $result = null;
         $answersArray = $quiz->getQuestionList()[$questionNumber - 1]->getAnswerList();
-        foreach ($answersArray as $index =>$answer) {
+        foreach ($answersArray as $index => $answer) {
             if ($index == (int)$numberAnswer - 1) {
                 $result = $answer;
             };
@@ -149,7 +148,7 @@ class QuizeController extends Controller
         return $result;
     }
 
-    function createNewOrReplaceExistingResult(Quiz $currentQuiz, User $user, Question $question): Result
+    private function createNewOrReplaceExistingResult(Quiz $currentQuiz, User $user, Question $question): Result
     {
         $repository = $this->getDoctrine()->getRepository(Result::class);
         $resultsArray = $repository->findAll();
