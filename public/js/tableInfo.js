@@ -63,10 +63,14 @@ function setSortData(checkedValue) {
 }
 
 function findOutSortedColomn() {
+    const cleanRadioClass = 'custom-control-input radio';
     let radios = document.getElementsByTagName('input');
     let value = "";
     for (let i = 0; i < radios.length; i++) {
         if (radios[i].type === 'radio' && radios[i].checked) {
+            if (radios[i].className !== cleanRadioClass) {
+                console.log('2');
+            }
             value = radios[i].value;
             console.log(radios[i].className);
         }

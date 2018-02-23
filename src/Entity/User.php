@@ -14,7 +14,6 @@ use App\Entity\Result;
 /**
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- *
  */
 class User implements UserInterface
 {
@@ -92,7 +91,7 @@ class User implements UserInterface
      */
     private $password;
 
-    public function getEmail(): string
+    public function getEmail()
     {
         return $this->email;
     }
@@ -102,7 +101,7 @@ class User implements UserInterface
         $this->email = $email;
     }
 
-    public function getcity(): string
+    public function getcity()
     {
         return $this->city;
     }
@@ -112,7 +111,7 @@ class User implements UserInterface
         $this->city = $city;
     }
 
-    public function getUsername(): string
+    public function getUsername()
     {
         return $this->username;
     }
@@ -122,7 +121,7 @@ class User implements UserInterface
         $this->username = $username;
     }
 
-    public function getFirstname(): string
+    public function getFirstname()
     {
         return $this->firstname;
     }
@@ -132,7 +131,7 @@ class User implements UserInterface
         $this->firstname = $username;
     }
 
-    public function getSecondname(): string
+    public function getSecondname()
     {
         return $this->secondname;
     }
@@ -142,7 +141,7 @@ class User implements UserInterface
         $this->secondname = $username;
     }
 
-    public function getThirdname(): string
+    public function getThirdname()
     {
         return $this->thirdname;
     }
