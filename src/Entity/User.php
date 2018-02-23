@@ -28,7 +28,7 @@ class User implements UserInterface
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -92,62 +92,62 @@ class User implements UserInterface
      */
     private $password;
 
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function setEmail($email)
+    public function setEmail($email): void
     {
         $this->email = $email;
     }
 
-    public function getcity()
+    public function getcity(): string
     {
         return $this->city;
     }
 
-    public function setcity($city)
+    public function setcity($city): void
     {
         $this->city = $city;
     }
 
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->username;
     }
 
-    public function setUsername($username)
+    public function setUsername($username): void
     {
         $this->username = $username;
     }
 
-    public function getFirstname()
+    public function getFirstname(): string
     {
         return $this->firstname;
     }
 
-    public function setFirstname($username)
+    public function setFirstname($username): void
     {
         $this->firstname = $username;
     }
 
-    public function getSecondname()
+    public function getSecondname(): string
     {
         return $this->secondname;
     }
 
-    public function setSecondname($username)
+    public function setSecondname($username): void
     {
         $this->secondname = $username;
     }
 
-    public function getThirdname()
+    public function getThirdname(): string
     {
         return $this->thirdname;
     }
 
-    public function setThirdname($username)
+    public function setThirdname($username): void
     {
         $this->thirdname = $username;
     }
@@ -157,17 +157,17 @@ class User implements UserInterface
         return $this->plainPassword;
     }
 
-    public function setPlainPassword($password)
+    public function setPlainPassword($password): void
     {
         $this->plainPassword = $password;
     }
 
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function setPassword($password)
+    public function setPassword($password): void
     {
         $this->password = $password;
     }
@@ -193,7 +193,7 @@ class User implements UserInterface
         $this->resultList = new ArrayCollection();
     }
 
-    public function getRoles()
+    public function getRoles(): array
     {
         return $this->roles;
     }
@@ -208,7 +208,7 @@ class User implements UserInterface
     /**
      * @return Collection|Result[]
      */
-    public function MYgetResultList()
+    public function MYgetResultList(): Collection
     {
         return $this->resultList;
     }

@@ -25,17 +25,17 @@
     
     <p id="sortOptions">
         <label class="custom-control custom-radio" >
-            <input id="option2" type="radio" name="radio" value="id" class="custom-control-input radio" checked>
+            <input id="idSort" type="radio" name="radio" value="id" class="custom-control-input radio" checked>
             <span class="custom-control-indicator"></span>
             <span class="custom-control-description">Id</span>
         </label>
         <label class="custom-control custom-radio">
-            <input id="option1" type="radio" name="radio" value="name" class="custom-control-input radio">
+            <input id="nameSort" type="radio" name="radio" value="name" class="custom-control-input radio">
             <span class="custom-control-indicator"></span>
             <span class="custom-control-description">Name</span>
         </label>
         <label class="custom-control custom-radio" >
-            <input id="option3" type="radio" name="radio" value="username" class="custom-control-input radio">
+            <input id="usernameSort" type="radio" name="radio" value="username" class="custom-control-input radio">
             <span class="custom-control-indicator"></span>
             <span class="custom-control-description">Username</span>
         </label>
@@ -47,5 +47,5 @@
 
 {% block javascripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="{{ asset('js/ajax-grid.js') }}"></script>
+    <script src="{{ asset('js/tableInfo.js') }}"></script>
 {% endblock %}

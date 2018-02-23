@@ -34,7 +34,7 @@ class Result
         return $this->quiz;
     }
 
-    public function setQuiz(Quiz $quiz)
+    public function setQuiz(Quiz $quiz): void
     {
         $this->quiz = $quiz;
     }
@@ -50,7 +50,7 @@ class Result
         return $this->user;
     }
 
-    public function setUser(User $user)
+    public function setUser(User $user): void
     {
         $this->user = $user;
     }
@@ -66,7 +66,7 @@ class Result
         return $this->question;
     }
 
-    public function setQuestion(Question $question)
+    public function setQuestion(Question $question): void
     {
         $this->question = $question;
     }
@@ -82,7 +82,7 @@ class Result
         return $this->answer;
     }
 
-    public function setAnswer(Answer $answer)
+    public function setAnswer(Answer $answer): void
     {
         $this->answer = $answer;
     }

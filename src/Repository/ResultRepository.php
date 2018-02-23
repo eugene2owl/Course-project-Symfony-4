@@ -13,16 +13,25 @@ class ResultRepository extends ServiceEntityRepository
         parent::__construct($registry, Result::class);
     }
 
-    public function findAllLike($text): array
+    public function findAllOrdLike($pattern, $field): array
     {
-        $em = $this->getEntityManager();
+        if ($field == 'name') {
+            $field = '';
+        }
+        if ($field == 'username') {
+            $field = '';
+        }
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'SELECT * FROM answer p';
+        if ($pattern != '') {
+            $sql .= ' WHERE p.id LIKE :pattern';
+        }
+        if ($field != '') {
+            $sql .= ' ORDER BY p.'.$field.' ASC';
+        }
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['pattern' => '%'.$pattern.'%']);
 
-        $query = $em->createQuery(
-            'SELECT p
-        FROM App\Entity\Result p
-        WHERE p.id LIKE :text'
-        )->setParameter('text', ("%".$text."%"));
-
-        return $query->execute();
+        return $stmt->fetchAll();
     }
 }

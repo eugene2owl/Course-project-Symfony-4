@@ -5,6 +5,7 @@ $(document).ready(function () {
         let data = [setSortData(findOutSortedColomn())];
         data.push(setFilterData(findOutFilterData()));
         data = {'data' : data};
+        console.log(data);
         $.ajax({
             url: this.href,
             type: "POST",
@@ -24,6 +25,14 @@ $(document).ready(function () {
         $('.last').click();
     })
 });
+
+function error(response) {
+    console.log(response);
+}
+
+function success(response) {
+    updatePanel(response);
+}
 
 function recognizeLastButton(checkedButton)
 {
@@ -59,6 +68,7 @@ function findOutSortedColomn() {
     for (let i = 0; i < radios.length; i++) {
         if (radios[i].type === 'radio' && radios[i].checked) {
             value = radios[i].value;
+            console.log(radios[i].className);
         }
     }
     return value;
@@ -76,14 +86,6 @@ function findOutFilterData() {
     return document.getElementById('filter').value;
 }
 
-function error(response) {
-    //alert('err');
-}
-
-function success(response) {
-    updatePanel(response);
-}
-
 function updatePanel(response)
 {
     removeOldTable();
@@ -91,6 +93,40 @@ function updatePanel(response)
     let dataRows = makeDataCells(response['entities']);
     let table = makeTable(header, dataRows);
     putTable(table);
+    disableImpossibleSorts();
+}
+
+function disableImpossibleSorts(){
+    let currentButton = $('.last')[0];
+    let radioButtons = $('.radio');
+    let disabledRadioButtons = [];
+    ableAll(radioButtons, false);
+    switch (currentButton.id) {
+        case 'quizButton':
+        case 'userButton':
+            break;
+        case 'questionButton':
+        case 'answerButton':
+            disabledRadioButtons.push($('#usernameSort')[0]);
+            break;
+        case 'resultButton':
+        default:
+            disabledRadioButtons.push($('#usernameSort')[0]);
+            disabledRadioButtons.push($('#idSort')[0]);
+            disabledRadioButtons.push($('#nameSort')[0]);
+            break;
+    }
+    ableAll(disabledRadioButtons, true);
+}
+
+function ableAll(buttons, disabled) {
+    for (let currentButtonNumber = 0; currentButtonNumber < buttons.length; currentButtonNumber++) {
+        if (disabled === true) {
+            buttons[currentButtonNumber].disabled = true;
+        } else {
+            buttons[currentButtonNumber].disabled = false;
+        }
+    }
 }
 
 function removeOldTable()

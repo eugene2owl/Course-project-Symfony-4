@@ -31,6 +31,12 @@ class Quiz
     private $quizname;
 
     /**
+     * @ORM\Column(type="string", length=64)
+     * @Assert\NotBlank()
+     */
+    private $birthday;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $playersAmount;
@@ -81,7 +87,7 @@ class Quiz
     /**
      * @return Collection|Question[]
      */
-    public function getQuestionList()
+    public function getQuestionList(): Collection
     {
         return $this->questionList;
     }
@@ -97,7 +103,7 @@ class Quiz
     /**
      * @return Collection|Result[]
      */
-    public function MYgetResultList()
+    public function MYgetResultList(): Collection
     {
         return $this->resultList;
     }
@@ -113,7 +119,7 @@ class Quiz
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -121,7 +127,7 @@ class Quiz
     /**
      * @return mixed
      */
-    public function getQuizname()
+    public function getQuizname(): string
     {
         return $this->quizname;
     }
@@ -137,7 +143,23 @@ class Quiz
     /**
      * @return mixed
      */
-    public function getPlayersAmount()
+    public function getBirthday(): string
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * @param mixed $birthday
+     */
+    public function setBirthday($birthday): void
+    {
+        $this->birthday = $birthday;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPlayersAmount(): int
     {
         return $this->playersAmount;
     }
@@ -153,7 +175,7 @@ class Quiz
     /**
      * @return mixed
      */
-    public function getStatus()
+    public function getStatus(): int
     {
         return $this->status;
     }
@@ -169,7 +191,7 @@ class Quiz
     /**
      * @return mixed
      */
-    public function getFirstNameLider()
+    public function getFirstNameLider(): string
     {
         return $this->firstNameLider;
     }
@@ -185,7 +207,7 @@ class Quiz
     /**
      * @return mixed
      */
-    public function getSecondNameLider()
+    public function getSecondNameLider(): string
     {
         return $this->secondNameLider;
     }
@@ -201,7 +223,7 @@ class Quiz
     /**
      * @return mixed
      */
-    public function getThirdNameLider()
+    public function getThirdNameLider(): string
     {
         return $this->thirdNameLider;
     }

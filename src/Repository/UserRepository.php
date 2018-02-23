@@ -13,16 +13,29 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    /*
-    public function findBySomething($value)
+    public function findAllOrdLike($pattern, $field): array
     {
-        return $this->createQueryBuilder('u')
-            ->where('u.something = :value')->setParameter('value', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        if ($field == 'name') {
+            $field = 'firstname';
+        }
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'SELECT * FROM user p';
+        if ($pattern != '') {
+            $sql .= ' WHERE p.username LIKE :pattern OR
+            p.id LIKE :pattern OR
+            p.city LIKE :pattern OR
+            p.email LIKE :pattern OR
+            p.roles LIKE :pattern OR
+            p.firstname LIKE :pattern OR
+            p.secondname LIKE :pattern OR
+            p.thirdname LIKE :pattern';
+        }
+        if ($field != '') {
+            $sql .= ' ORDER BY p.'.$field.' ASC';
+        }
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['pattern' => '%'.$pattern.'%']);
+
+        return $stmt->fetchAll();
     }
-    */
 }

@@ -19,30 +19,31 @@ class QuizQuestionsController extends Controller
     public function index()
     {
         $quiz = new Quiz();
-        $quiz->setQuizname("Colors");
+        $quiz->setQuizname("Books");
         $quiz->setPlayersAmount(0);
         $quiz->setStatus(1);
-        $quiz->setFirstNameLider("Test");
-        $quiz->setSecondNameLider("Test2");
-        $quiz->setThirdNameLider("Test3");
+        $quiz->setFirstNameLider("");
+        $quiz->setSecondNameLider("");
+        $quiz->setThirdNameLider("");
+        $quiz->setBirthday(date('jS F Y h:i:s'));
 
 
-        $question = new Question("What is a color of sunset?");
-        $question1 = new Question("What is a color o chameleon?");
-        $question2 = new Question("What are the colors of Canada flag?");
+        $question = new Question("Who is the author of 'Fathers and children'?");
+        $question1 = new Question("Who wrote 'Crime and punishment'?");
+        $question2 = new Question("How many volumes of 'dead Souls' did survive till nowadays?");
 
 
-        $answer1question1 = new Answer("Blue", 0);
-        $answer2question1 = new Answer("White", 0);
-        $answer3question1 = new Answer("Red", 1);
+        $answer1question1 = new Answer("Turgenev", 1);
+        $answer2question1 = new Answer("Gogol", 0);
+        $answer3question1 = new Answer("Pushkin", 0);
 
-        $answer1question2 = new Answer("Green", 0);
-        $answer2question2 = new Answer("Random", 0);
-        $answer3question2 = new Answer("Color of it's environment", 1);
+        $answer1question2 = new Answer("Dostoevsky", 1);
+        $answer2question2 = new Answer("Turgenev", 0);
+        $answer3question2 = new Answer("Esenin", 0);
 
-        $answer1question3 = new Answer("Red and white", 0);
-        $answer2question3 = new Answer("Red", 0);
-        $answer3question3 = new Answer("White and black", 1);
+        $answer1question3 = new Answer("1", 1);
+        $answer2question3 = new Answer("2", 0);
+        $answer3question3 = new Answer("3", 0);
 
 
         $question->setQuiz($quiz);

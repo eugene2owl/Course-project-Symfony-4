@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -22,7 +24,7 @@ class Answer
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -35,7 +37,7 @@ class Answer
     /**
      * @return mixed
      */
-    public function getText()
+    public function getText(): string
     {
         return $this->text;
     }
@@ -87,7 +89,7 @@ class Answer
         return $this->question;
     }
 
-    public function setQuestion(Question $question):void
+    public function setQuestion(Question $question): void
     {
         $this->question = $question;
     }
@@ -102,7 +104,7 @@ class Answer
     /**
      * @return Collection|Result[]
      */
-    public function MYgetResultList()
+    public function MYgetResultList(): Collection
     {
         return $this->resultList;
     }

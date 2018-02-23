@@ -14,23 +14,32 @@ class QuizRepository extends ServiceEntityRepository
         parent::__construct($registry, Quiz::class);
     }
 
-    public function findAllLike($text): array
+    public function findAllOrdLike($pattern, $field): array
     {
-        $em = $this->getEntityManager();
+        if ($field == 'name') {
+            $field = 'quizname';
+        }
+        if ($field == 'username') {
+            $field = 'first_name_Lider';
+        }
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'SELECT * FROM quiz p';
+        if ($pattern != '') {
+            $sql .= ' WHERE p.quizname LIKE :pattern OR
+            p.players_amount LIKE :pattern OR
+            p.status LIKE :pattern OR
+            p.birthday LIKE :pattern OR
+            p.first_name_Lider LIKE :pattern OR
+            p.second_name_Lider LIKE :pattern OR
+            p.third_name_Lider LIKE :pattern OR
+            p.id LIKE :pattern';
+        }
+        if ($field != '') {
+            $sql .= ' ORDER BY p.'.$field.' ASC';
+        }
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['pattern' => '%'.$pattern.'%']);
 
-        $query = $em->createQuery(
-            'SELECT p
-        FROM App\Entity\Quiz p
-        WHERE (p.quizname LIKE :text) OR 
-        (p.firstNameLider LIKE :text) OR 
-        (p.secondNameLider LIKE :text) OR 
-        (p.thirdNameLider LIKE :text) OR
-        (p.status LIKE :text) OR 
-        (p.id LIKE :text) OR 
-        (p.id LIKE :text)
-        '
-        )->setParameter('text', ("%".$text."%"));
-
-        return $query->execute();
+        return $stmt->fetchAll();
     }
 }

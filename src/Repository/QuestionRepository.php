@@ -13,17 +13,27 @@ class QuestionRepository extends ServiceEntityRepository
         parent::__construct($registry, Question::class);
     }
 
-    public function findAllLike($text): array
+    public function findAllOrdLike($pattern, $field): array
     {
-        $em = $this->getEntityManager();
+        if ($field == 'name') {
+            $field = 'text';
+        }
+        if ($field == 'username') {
+            $field = '';
+        }
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = 'SELECT * FROM question p';
+        if ($pattern != '') {
+            $sql .= ' WHERE p.text LIKE :pattern OR
+            p.quiz_id LIKE :pattern OR
+            p.id LIKE :pattern';
+        }
+        if ($field != '') {
+            $sql .= ' ORDER BY p.'.$field.' ASC';
+        }
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['pattern' => '%'.$pattern.'%']);
 
-        $query = $em->createQuery(
-            'SELECT p
-        FROM App\Entity\Question p
-        WHERE p.text LIKE :text OR 
-        p.id LIKE :text'
-        )->setParameter('text', ("%".$text."%"));
-
-        return $query->execute();
+        return $stmt->fetchAll();
     }
 }

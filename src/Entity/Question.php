@@ -22,7 +22,7 @@ class Question
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -48,7 +48,7 @@ class Question
     /**
      * @param mixed $answer
      */
-    public function  setAnswerList(Answer $answer): void
+    public function setAnswerList(Answer $answer): void
     {
         $this->answerList->add($answer);
         $answer->setQuestion($this);
@@ -57,7 +57,7 @@ class Question
     /**
      * @return Collection|Answer[]
      */
-    public function getAnswerList()
+    public function getAnswerList(): Collection
     {
         return $this->answerList;
     }
@@ -73,7 +73,7 @@ class Question
         return $this->quiz;
     }
 
-    public function setQuiz(Quiz $quiz)
+    public function setQuiz(Quiz $quiz): void
     {
         $this->quiz = $quiz;
     }
@@ -81,7 +81,7 @@ class Question
     /**
      * @return mixed
      */
-    public function getText()
+    public function getText(): string
     {
         return $this->text;
     }
@@ -96,7 +96,7 @@ class Question
     /**
      * @return Collection|Result[]
      */
-    public function MYgetResultList()
+    public function MYgetResultList(): collection
     {
         return $this->resultList;
     }

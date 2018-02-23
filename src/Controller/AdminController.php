@@ -67,26 +67,26 @@ class AdminController extends Controller
     {
         switch ($slug) {
             case 'quiz':
-                $entities = $this->getDoctrine()->getRepository(Quiz::class)->findAllLike($pattern);
+                $entities = $this->getDoctrine()->getRepository(Quiz::class)->findAllOrdLike($pattern, $sortByField);
                 break;
             case 'question':
-                $entities = $this->getDoctrine()->getRepository(Question::class)->findAllLike($pattern);
+                $entities = $this->getDoctrine()->getRepository(Question::class)->findAllOrdLike($pattern, $sortByField);
                 break;
             case 'answer':
-                $entities = $this->getDoctrine()->getRepository(Answer::class)->findAllLike($pattern);
+                $entities = $this->getDoctrine()->getRepository(Answer::class)->findAllOrdLike($pattern, $sortByField);
                 break;
             case 'result':
-                $entities = $this->getDoctrine()->getRepository(Result::class)->findAllLike($pattern);
+                $entities = $this->getDoctrine()->getRepository(Result::class)->findAllOrdLike($pattern, $sortByField);
                 break;
             case 'user':
-                $entities = $this->getDoctrine()->getRepository(User::class)->findAll();
+                $entities = $this->getDoctrine()->getRepository(User::class)->findAllOrdLike($pattern, $sortByField);
                 break;
             default:
                 $entities = $this->getDoctrine()->getRepository(Quiz::class)->findAll();
         }
-        if ($sortByField != "") {
+        /*if ($sortByField != "" && count($entities) != 0) {
             $entities = $this->sortEntities($entities, $sortByField);
-        }
+        }*/
         return $entities;
     }
 
