@@ -14,7 +14,7 @@ class QuizRepository extends ServiceEntityRepository
         parent::__construct($registry, Quiz::class);
     }
 
-    public function findAllOrdLike($pattern, $field): array
+    public function findAllOrdLike($pattern, $field, $order): array
     {
         if ($field == 'name') {
             $field = 'quizname';
@@ -35,7 +35,7 @@ class QuizRepository extends ServiceEntityRepository
             p.id LIKE :pattern';
         }
         if ($field != '') {
-            $sql .= ' ORDER BY p.'.$field.' ASC';
+            $sql .= ' ORDER BY p.'.$field.' '.$order;
         }
         $stmt = $conn->prepare($sql);
         $stmt->execute(['pattern' => '%'.$pattern.'%']);

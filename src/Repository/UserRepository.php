@@ -13,7 +13,7 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    public function findAllOrdLike($pattern, $field): array
+    public function findAllOrdLike($pattern, $field, $order): array
     {
         if ($field == 'name') {
             $field = 'firstname';
@@ -31,7 +31,7 @@ class UserRepository extends ServiceEntityRepository
             p.thirdname LIKE :pattern';
         }
         if ($field != '') {
-            $sql .= ' ORDER BY p.'.$field.' ASC';
+            $sql .= ' ORDER BY p.'.$field.' '.$order;
         }
         $stmt = $conn->prepare($sql);
         $stmt->execute(['pattern' => '%'.$pattern.'%']);

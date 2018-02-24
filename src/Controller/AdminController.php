@@ -52,10 +52,11 @@ class AdminController extends Controller
 
         $dataFromAjax = $request->get('data');
 
-        $dataFromAjaxSort = $dataFromAjax[0]['sortbyfield'];
-        $dataFromAjaxPattern = $dataFromAjax[1]['pattern'];
+        $dataFromAjaxSortField = $dataFromAjax[0]['sortbyfield'];
+        $dataFromAjaxSortOrder = $dataFromAjax[1]['order'];
+        $dataFromAjaxPattern = $dataFromAjax[2]['pattern'];
 
-        $entities = $this->getEntitiesArray($slug, $dataFromAjaxSort, $dataFromAjaxPattern);
+        $entities = $this->getEntitiesArray($slug, $dataFromAjaxSortField, $dataFromAjaxPattern, $dataFromAjaxSortOrder);
 
         $table_data = array(
             'entities' => $entities,
@@ -63,80 +64,27 @@ class AdminController extends Controller
         return $this->json($table_data);
     }
 
-    private function getEntitiesArray(string $slug, string $sortByField, string $pattern)
+    private function getEntitiesArray(string $slug, string $sortByField, string $pattern, string $order)
     {
         switch ($slug) {
             case 'quiz':
-                $entities = $this->getDoctrine()->getRepository(Quiz::class)->findAllOrdLike($pattern, $sortByField);
+                $entities = $this->getDoctrine()->getRepository(Quiz::class)->findAllOrdLike($pattern, $sortByField, $order);
                 break;
             case 'question':
-                $entities = $this->getDoctrine()->getRepository(Question::class)->findAllOrdLike($pattern, $sortByField);
+                $entities = $this->getDoctrine()->getRepository(Question::class)->findAllOrdLike($pattern, $sortByField, $order);
                 break;
             case 'answer':
-                $entities = $this->getDoctrine()->getRepository(Answer::class)->findAllOrdLike($pattern, $sortByField);
+                $entities = $this->getDoctrine()->getRepository(Answer::class)->findAllOrdLike($pattern, $sortByField, $order);
                 break;
             case 'result':
-                $entities = $this->getDoctrine()->getRepository(Result::class)->findAllOrdLike($pattern, $sortByField);
+                $entities = $this->getDoctrine()->getRepository(Result::class)->findAllOrdLike($pattern, $sortByField, $order);
                 break;
             case 'user':
-                $entities = $this->getDoctrine()->getRepository(User::class)->findAllOrdLike($pattern, $sortByField);
+                $entities = $this->getDoctrine()->getRepository(User::class)->findAllOrdLike($pattern, $sortByField, $order);
                 break;
             default:
                 $entities = $this->getDoctrine()->getRepository(Quiz::class)->findAll();
         }
-        /*if ($sortByField != "" && count($entities) != 0) {
-            $entities = $this->sortEntities($entities, $sortByField);
-        }*/
         return $entities;
-    }
-
-    private function sortEntities(array $entitiesArray, string $field): array
-    {
-        switch ($field) {
-            case 'name':
-                switch (get_class($entitiesArray[0])) {
-                    case Quiz::class:
-                        usort($entitiesArray, function ($a, $b) {
-                            return strcmp($a->getQuizname(), $b->getQuizname());
-                        });
-                        break;
-                    case Result::class:
-                        usort($entitiesArray, function ($a, $b) {
-                            return strcmp($a->getQuiz()->getQuizname(), $b->getQuiz()->getQuizname());
-                        });
-                        break;
-                    case Question::class:
-                    case Answer::class:
-                        usort($entitiesArray, function ($a, $b) {
-                            return strcmp($a->getText(), $b->getText());
-                        });
-                        break;
-                    case User::class:
-                        usort($entitiesArray, function ($a, $b) {
-                            return strcmp($a->getUsername(), $b->getUsername());
-                        });
-                        break;
-                }
-                break;
-            case 'username':
-                switch (get_class($entitiesArray[0])) {
-                    case Result::class:
-                        usort($entitiesArray, function ($a, $b) {
-                            return strcmp($a->getUser()->getUsername(), $b->getUser()->getUsername());
-                        });
-                        break;
-                    case Quiz::class:
-                        usort($entitiesArray, function ($a, $b) {
-                            return strcmp($a->getFirstnameLider(), $b->getFirstnameLider());
-                        });
-                        break;
-                    case User::class:
-                        usort($entitiesArray, function ($a, $b) {
-                            return strcmp($a->getUsername(), $b->getUsername());
-                        });
-                        break;
-                }
-        }
-        return $entitiesArray;
     }
 }

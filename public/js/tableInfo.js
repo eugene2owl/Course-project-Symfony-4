@@ -2,10 +2,8 @@ $(document).ready(function () {
     $('.btn').click(function(e) {
         e.preventDefault();
         recognizeLastButton(this);
-        let data = [setSortData(findOutSortedColomn())];
-        data.push(setFilterData(findOutFilterData()));
+        let data = findOutData();
         data = {'data' : data};
-        console.log(data);
         $.ajax({
             url: this.href,
             type: "POST",
@@ -17,7 +15,7 @@ $(document).ready(function () {
         });
     });
 
-    $('.radio').change(function() {
+    $('.radio').click(function() {
         $('.last').click();
     });
 
@@ -26,12 +24,21 @@ $(document).ready(function () {
     })
 });
 
-function error(response) {
-    console.log(response);
-}
-
 function success(response) {
     updatePanel(response);
+}
+
+function error(response) {
+    //console.log(response);
+}
+
+function findOutData()
+{
+    let sortData = findOutSortedColomnAndOrder();
+    let sortField = setSortField(sortData[0]);
+    let sortOrder = setSortOrder(sortData[1]);
+    let filter = setFilterData(findOutFilterData());
+    return [sortField, sortOrder, filter];
 }
 
 function recognizeLastButton(checkedButton)
@@ -44,9 +51,9 @@ function recognizeLastButton(checkedButton)
     checkedButton.className += " last";
 }
 
-function setSortData(checkedValue) {
+function setSortField(field) {
     let data;
-    switch (checkedValue) {
+    switch (field) {
         case 'name':
             data = {'sortbyfield': 'name'};
             break;
@@ -62,20 +69,32 @@ function setSortData(checkedValue) {
     return data;
 }
 
-function findOutSortedColomn() {
+function setSortOrder(order) {
+    return {'order': order};
+}
+
+function findOutSortedColomnAndOrder() {
     const cleanRadioClass = 'custom-control-input radio';
-    let radios = document.getElementsByTagName('input');
+    const lastRadioClass = cleanRadioClass + ' lastRadio';
+    let radios = document.getElementsByClassName('radio');
     let value = "";
-    for (let i = 0; i < radios.length; i++) {
-        if (radios[i].type === 'radio' && radios[i].checked) {
-            if (radios[i].className !== cleanRadioClass) {
-                console.log('2');
+    let order = 'ASC';
+    let currentRadio;
+    for (let currentRadioNumber = 0; currentRadioNumber < radios.length; currentRadioNumber++) {
+        if (radios[currentRadioNumber].type === 'radio' && radios[currentRadioNumber].checked) {
+            if (radios[currentRadioNumber].className === (lastRadioClass)) {
+                order = 'DESC';
+            } else {
+                currentRadio = radios[currentRadioNumber];
             }
-            value = radios[i].value;
-            console.log(radios[i].className);
+            value = radios[currentRadioNumber].value;
         }
+        radios[currentRadioNumber].className = cleanRadioClass;
     }
-    return value;
+    if (currentRadio !== undefined) {
+        currentRadio.className = lastRadioClass;
+    }
+    return [value, order];
 }
 
 function setFilterData(text) {
