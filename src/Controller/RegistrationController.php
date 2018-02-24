@@ -40,7 +40,7 @@ class RegistrationController extends Controller
         }
         $formView = $form->createView();
         $toLoginLink = $this->generateUrl('login');
-        return $this->render('registration/register.html.twig', [
+        return $this->render('Registration/register.html.twig', [
                 'toLoginLink' => $toLoginLink,
                 'form' => $formView
             ]

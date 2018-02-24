@@ -27,14 +27,14 @@ class QuizController extends Controller
         $nextQuestionLink = $this->generateUrl('nextQuestion', ['slug'=>$slug, 'number' => CURRENT_QUESTION_PAGE]);
         $currentQuestion = $currentQuiz->getQuestionList()[CURRENT_QUESTION_PAGE - 1];
         $answers = $drawer->findOutAnswers($currentQuestion);
-        return $this->render('Quizzes/quiz.html.twig', array(
+        return $this->render('Quizzes/quiz.html.twig', [
             'answers' => $answers,
             'currentQuestionNumber' => CURRENT_QUESTION_PAGE,
             'quiz' => $currentQuiz,
             'questionText' => $questionText,
             'nextQuestionLink' => $nextQuestionLink,
             'answersAmount' => $answersAmount,
-        ));
+        ]);
     }
 
     /**
@@ -56,14 +56,14 @@ class QuizController extends Controller
         $currentQuestion = $currentQuiz->getQuestionList()[$nextQuestionNumber - 1];
         $nextQuestionText = $drawer->findOutQuestionText($nextQuestion);
         $drawer->recognizeResult($currentQuiz, $currentUser, $currentQuestion, $answerObj, $this);
-        $response_data = array(
+        $response_data = [
             'number' => $number + 1,
             'nextQuestionLink' => $nextQuestionLink,
             'answers' => $answers,
             'correctness' => $answerObj->getisTrue(),
             'nextQuestion' => $nextQuestionText,
             'toResultLink' => "",
-        );
+        ];
         $response_data['toResultLink'] = $drawer->findOutToResultLink($currentQuiz, $nextQuestionNumber, $slug, $this);
         return $this->json($response_data);
     }

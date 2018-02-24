@@ -18,7 +18,7 @@
     <form id='questionList' action="{{ nextQuestionLink }}">
         <div class="wrapper container">
             <div class="form-signin">
-                <h2 class="form-signin-heading" id="questiontext">{{ currentQuestionNumber }}{{ ")" }}{{ questionText }}</h2>
+                <h2 class="form-signin-heading" id="questionText">{{ currentQuestionNumber }}{{ ")" }}{{ questionText }}</h2>
                 <ul>
                     {% for answer in answers %}
                     <li>
@@ -29,17 +29,17 @@
                     {% endfor %}
                 </ul>
                 <br>
-                <input type='submit' form='questionList' value="button next" class="btn btn-lg btn-primary btn-block" disabled="not">
+                <input type='submit' form='questionList' value="button next" class="btn btn-lg btn-primary btn-block" disabled>
             </div>
         </div>
     </form>
+
+    <div id="additional"></div>
 </body>
 </html>
 {% endblock %}
 
 {% block javascripts %}
-   {# <script src="{{ asset('js/blockButtonNext.js') }}"></script> #}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="{{ asset('js/drawQuestion.js') }}"></script>
 {% endblock %}

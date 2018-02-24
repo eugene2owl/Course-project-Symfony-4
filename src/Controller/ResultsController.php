@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Quiz;
-use App\Entity\Result;
-use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\ResultsCalculator;
 

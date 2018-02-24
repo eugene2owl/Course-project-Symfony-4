@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Service;
 
@@ -51,12 +51,15 @@ class QuizDrawer extends Controller
 
     public function findOutCurrentQuestionPage(Quiz $quiz, Controller $controller): int
     {
+        $user = $controller->getUser();
         $em = $controller->getDoctrine()->getManager();
-        $criteria = ['user' => $controller->getUser()->getId(), 'quiz' => $quiz->getId()];
+        $criteria = ['user' => $user->getId(), 'quiz' => $quiz->getId()];
         $result = $em->getRepository(Result::class)->findBy($criteria);
         $CurrentQuestionPage = 1;
         if (count($result) < count($quiz->getQuestionList())) {
             $CurrentQuestionPage = count($result) + 1;
+        } else {
+            $this->deleteAllOldResults($user, $quiz, $controller);
         }
         return $CurrentQuestionPage;
     }
@@ -71,6 +74,17 @@ class QuizDrawer extends Controller
             $quiz->setPlayersAmount($quiz->getPlayersAmount() + 1);
         }
         return $quiz;
+    }
+
+    public function deleteAllOldResults(User $user, Quiz $quiz, Controller $controller): void
+    {
+        $em = $controller->getDoctrine()->getManager();
+        $criteria = ['user'=>$user->getId(), 'quiz'=>$quiz->getId()];
+        $res = $controller->getDoctrine()->getRepository(Result::class)->findBy($criteria);
+        foreach ($res as $r) {
+            $em->remove($r);
+        }
+        $em->flush();
     }
 
     public function recognizeResult(Quiz $currentQuiz, User $user, Question $question, Answer $answer, Controller $controller): void

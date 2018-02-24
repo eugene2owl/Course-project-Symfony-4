@@ -4,21 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Answer;
-use App\Entity\Question;
-use App\Entity\Quiz;
-use App\Entity\Result;
-use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use App\Service\EntitiesPuller;
 
 class AdminController extends Controller
 {
@@ -46,45 +35,18 @@ class AdminController extends Controller
     /**
      * @Route("/admin/{slug}", name="drawTable")
      */
-    public function drawTable(Request $request, string $slug)
+    public function drawTable(Request $request, string $slug, EntitiesPuller $puller)
     {
-        $entities = null;
-
         $dataFromAjax = $request->get('data');
 
         $dataFromAjaxSortField = $dataFromAjax[0]['sortbyfield'];
         $dataFromAjaxSortOrder = $dataFromAjax[1]['order'];
         $dataFromAjaxPattern = $dataFromAjax[2]['pattern'];
 
-        $entities = $this->getEntitiesArray($slug, $dataFromAjaxSortField, $dataFromAjaxPattern, $dataFromAjaxSortOrder);
-
-        $table_data = array(
+        $entities = $puller->getEntitiesArray($slug, $dataFromAjaxSortField, $dataFromAjaxPattern, $dataFromAjaxSortOrder, $this);
+        $table_data = [
             'entities' => $entities,
-        );
+        ];
         return $this->json($table_data);
-    }
-
-    private function getEntitiesArray(string $slug, string $sortByField, string $pattern, string $order)
-    {
-        switch ($slug) {
-            case 'quiz':
-                $entities = $this->getDoctrine()->getRepository(Quiz::class)->findAllOrdLike($pattern, $sortByField, $order);
-                break;
-            case 'question':
-                $entities = $this->getDoctrine()->getRepository(Question::class)->findAllOrdLike($pattern, $sortByField, $order);
-                break;
-            case 'answer':
-                $entities = $this->getDoctrine()->getRepository(Answer::class)->findAllOrdLike($pattern, $sortByField, $order);
-                break;
-            case 'result':
-                $entities = $this->getDoctrine()->getRepository(Result::class)->findAllOrdLike($pattern, $sortByField, $order);
-                break;
-            case 'user':
-                $entities = $this->getDoctrine()->getRepository(User::class)->findAllOrdLike($pattern, $sortByField, $order);
-                break;
-            default:
-                $entities = $this->getDoctrine()->getRepository(Quiz::class)->findAll();
-        }
-        return $entities;
     }
 }

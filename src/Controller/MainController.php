@@ -7,43 +7,24 @@ namespace App\Controller;
 use App\Entity\Quiz;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\PlayersRightsCalculator;
 
 class MainController extends Controller
 {
     /**
      * @Route("/main", name="main")
      */
-    public function mainFunction()
+    public function mainFunction(PlayersRightsCalculator $rightsCalculator)
     {
-        $repository = $this->getDoctrine()->getRepository(Quiz::class);
-        $arr = $repository->findAll();
-        $enabledArray = $this->findPassedQuizzes($arr);
+        $quizzes = $rightsCalculator->findAllQuizzes($this);
+        $enabledArray = $rightsCalculator->findPassedQuizzes($quizzes, $this);
         $toQuizLink = 'http://symfony4.loc/main/quizzes/';
         $toQuizResultLink = 'http://symfony4.loc/main/quizResults/';
         return $this->render('security/main.html.twig', array(
-            'quizList' => $arr,
+            'quizList' => $quizzes,
             'enabledArray' => $enabledArray,
             'toQuizLink' => $toQuizLink,
             'toQuizResultLink' => $toQuizResultLink,
         ));
-    }
-
-    private function findPassedQuizzes(array $quizArray): array
-    {
-        $enabledArray = [];
-        for ($currentQuiz = 0; $currentQuiz < count($quizArray); $currentQuiz++) {
-            $isPassed = false;
-            $amountOfPassedTasks = 0;
-            foreach ($quizArray[$currentQuiz]->MYgetResultList() as $quizResult) {
-                if ($quizResult->getUser() == $this->getUser()) {
-                    $amountOfPassedTasks++;
-                }
-            }
-            if ($amountOfPassedTasks == count($quizArray[$currentQuiz]->getQuestionList())) {
-                $isPassed = true;
-            }
-            $isPassed ? array_push($enabledArray, true) : array_push($enabledArray, false);
-        }
-        return $enabledArray;
     }
 }

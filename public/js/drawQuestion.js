@@ -1,15 +1,14 @@
 $(document).ready(function () {
 
-    var btn = document.querySelector('[type=submit]');
-    $('.radioButtons').click(function (e) {
+    $('.radioButtons').click(function () {
+        let btn = document.querySelector('[type=submit]');
         btn.disabled = false;
     });
 
    $('#questionList').submit(function (e) {
         e.preventDefault();
 
-        var data = $(this).serialize();
-        console.log(data);
+        let data = $(this).serialize();
         $.ajax({
             url: this.action,
             type: "POST",
@@ -17,33 +16,63 @@ $(document).ready(function () {
             dataType: 'json',
             cache: false,
             success:function (response) {
-
-                if (response['correctness']) {
-                        swal("Correct!", "", "success")
-                } else {
-                    swal("Not correct.", "", "warning");
-                }
-
-                if (response['toResultLink'] != "") {
+                showCorrectness(response['correctness']);
+                if (response['toResultLink'] !== "") {
                     setTimeout(function () {
                         document.location.href = response['toResultLink'];
                     }, 1000);
                 } else {
-                    console.log(response['lastQuestion']);
-
-                    $('#questiontext')[0].innerHTML = response['number'] + ') ' + response['nextQuestion'];
-
+                    blockButton();
+                    $('#questionText')[0].innerHTML = response['number'] + ')' + response['nextQuestion'];
                     $('#questionList')[0].action = response['nextQuestionLink'];
+                    removeOldAnswers();
+                    putNewAnswers(response['answers']);
+                    fillInNewAnswers(response['answers']);
 
-                    response['answers'].forEach(function (element, i) {
-                        $('#label' + (i + 1).toString())[0].innerHTML = element;
+                    $('.radioButtons').click(function () {
+                        let btn = document.querySelector('[type=submit]');
+                        btn.disabled = false;
                     });
                 }
             },
-            error:function () {
-                alert('err');
-            }
         })
-   }
-   )
+   })
 });
+
+function showCorrectness(isCorrect) {
+    if (isCorrect) {
+        swal("Correct!", "", "success")
+    } else {
+        swal("Not correct.", "", "warning");
+    }
+}
+
+function blockButton() {
+    let btn = document.querySelector('[type=submit]');
+    btn.disabled = true;
+}
+
+function removeOldAnswers() {
+    let oldAnswer = document.getElementsByTagName('li')[0];
+    while (typeof(oldAnswer) !== 'undefined') {
+        oldAnswer.parentNode.removeChild(oldAnswer);
+        oldAnswer = document.getElementsByTagName('li')[0];
+    }
+}
+
+function putNewAnswers(answers) {
+    answers.forEach(function (text, index) {
+        let platform = document.getElementsByTagName('ul');
+        $(platform).append($('<li>\n' +
+            '<input id="' + (index + 1) + '" type="radio" name="select" class="radioButtons" value="' + (index + 1) + '">\n' +
+            '<label for="' + (index + 1) + '" id="label' + (index + 1) + '">' + text + '</label>\n' +
+            '<div class="check"></div>\n' +
+            '</li>'));
+    });
+}
+
+function fillInNewAnswers(answers) {
+    answers.forEach(function (element, i) {
+        $('#label' + (i + 1).toString())[0].innerHTML = element;
+    });
+}
