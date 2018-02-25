@@ -1,4 +1,4 @@
-{% extends '../base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
 <!doctype html>
@@ -20,27 +20,9 @@
         <a class="btn btn-lg btn-default" id="resultButton" href="{{ toResultTableLink }}">Result</a>
         <a class="btn btn-lg btn-default" id="userButton" href="{{ toUserTableLink }}">User</a>
     </div>
-
     <input type="text" id="filter" class="form-control" placeholder="find...">
-    
-    <p id="sortOptions">
-        <label class="custom-control custom-radio" >
-            <input id="idSort" type="radio" name="radio" value="id" class="custom-control-input radio" checked>
-            <span class="custom-control-indicator"></span>
-            <span class="custom-control-description">Id</span>
-        </label>
-        <label class="custom-control custom-radio">
-            <input id="nameSort" type="radio" name="radio" value="name" class="custom-control-input radio">
-            <span class="custom-control-indicator"></span>
-            <span class="custom-control-description">Name</span>
-        </label>
-        <label class="custom-control custom-radio" >
-            <input id="usernameSort" type="radio" name="radio" value="username" class="custom-control-input radio">
-            <span class="custom-control-indicator"></span>
-            <span class="custom-control-description">Username</span>
-        </label>
-    </p>
-    <div id=”entities-grid”></div>
+    <p id="sortOptions"></p>
+    <div id=”grid”></div>
 </body>
 </html>
 {% endblock %}
@@ -48,4 +30,5 @@
 {% block javascripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="{{ asset('js/tableInfo.js') }}"></script>
+    <!--script src="{{ asset('js/temp.js') }}"></script-->
 {% endblock %}

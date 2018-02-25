@@ -13,24 +13,34 @@ class AnswerRepository extends ServiceEntityRepository
         parent::__construct($registry, Answer::class);
     }
 
-    public function findAllOrdLike($pattern, $field, $order): array
+    public function findAllOrdLike(string $pattern, string $fieldSort, string $order, array $fieldFilter): array
     {
-        if ($field == 'name') {
-            $field = 'text';
+        if ($fieldSort == 'name') {
+            $fieldSort = 'text';
         }
-        if ($field == 'username') {
-            $field = '';
+        if ($fieldSort == 'username') {
+            $fieldSort = '';
         }
         $conn = $this->getEntityManager()->getConnection();
         $sql = 'SELECT * FROM answer p';
         if ($pattern != '') {
-            $sql .= ' WHERE p.text LIKE :pattern OR
-            p.is_true LIKE :pattern OR
-            p.question_id LIKE :pattern OR
-            p.id LIKE :pattern';
+            if (in_array("username", $fieldFilter)) {
+                array_splice($fieldFilter, array_search('username', $fieldFilter), 1);
+            }
+            if (count($fieldFilter) > 0) {
+                $sql .= ' WHERE ';
+                for ($number = 0; $number < count($fieldFilter); $number++) {
+                    if ($fieldFilter[$number] == 'name') {
+                        $number > 0 ? $sql .= ' OR p.text LIKE :pattern' : $sql .= 'p.text LIKE :pattern';
+                    }
+                    if ($fieldFilter[$number] == 'id') {
+                        $number > 0 ? $sql .= ' OR p.id LIKE :pattern' : $sql .= 'p.id LIKE :pattern';
+                    }
+                }
+            }
         }
-        if ($field != '') {
-            $sql .= ' ORDER BY p.'.$field.' '.$order;
+        if ($fieldSort != '') {
+            $sql .= ' ORDER BY p.'.$fieldSort.' '.$order;
         }
         $stmt = $conn->prepare($sql);
         $stmt->execute(['pattern' => '%'.$pattern.'%']);

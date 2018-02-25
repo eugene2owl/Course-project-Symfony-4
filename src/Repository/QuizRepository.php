@@ -14,28 +14,32 @@ class QuizRepository extends ServiceEntityRepository
         parent::__construct($registry, Quiz::class);
     }
 
-    public function findAllOrdLike($pattern, $field, $order): array
+    public function findAllOrdLike(string $pattern, string $fieldSort, string $order, array $fieldFilter): array
     {
-        if ($field == 'name') {
-            $field = 'quizname';
+        if ($fieldSort == 'name') {
+            $fieldSort = 'quizname';
         }
-        if ($field == 'username') {
-            $field = 'first_name_Lider';
+        if ($fieldSort == 'username') {
+            $fieldSort = 'first_name_Lider';
         }
         $conn = $this->getEntityManager()->getConnection();
         $sql = 'SELECT * FROM quiz p';
         if ($pattern != '') {
-            $sql .= ' WHERE p.quizname LIKE :pattern OR
-            p.players_amount LIKE :pattern OR
-            p.status LIKE :pattern OR
-            p.birthday LIKE :pattern OR
-            p.first_name_Lider LIKE :pattern OR
-            p.second_name_Lider LIKE :pattern OR
-            p.third_name_Lider LIKE :pattern OR
-            p.id LIKE :pattern';
+            $sql .= ' WHERE ';
+            for ($number = 0; $number < count($fieldFilter); $number++) {
+                if ($fieldFilter[$number] == 'username') {
+                    $number > 0 ? $sql .= ' OR p.first_name_Lider LIKE :pattern' : $sql .= 'p.first_name_Lider LIKE :pattern';
+                }
+                if ($fieldFilter[$number] == 'name') {
+                    $number > 0 ? $sql .= ' OR p.quizname LIKE :pattern' : $sql .= 'p.quizname LIKE :pattern';
+                }
+                if ($fieldFilter[$number] == 'id') {
+                    $number > 0 ? $sql .= ' OR p.id LIKE :pattern' : $sql .= 'p.id LIKE :pattern';
+                }
+            }
         }
-        if ($field != '') {
-            $sql .= ' ORDER BY p.'.$field.' '.$order;
+        if ($fieldSort != '') {
+            $sql .= ' ORDER BY p.'.$fieldSort.' '.$order;
         }
         $stmt = $conn->prepare($sql);
         $stmt->execute(['pattern' => '%'.$pattern.'%']);

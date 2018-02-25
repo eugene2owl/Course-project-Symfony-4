@@ -14,7 +14,7 @@ class QuizCreator extends Controller
     public function createQuiz(Controller $controller)
     {
         $quiz = new Quiz();
-        $quiz->setQuizname("Math");
+        $quiz->setQuizname("Animals");
         $quiz->setPlayersAmount(0);
         $quiz->setStatus(1);
         $quiz->setFirstNameLider("");
@@ -23,27 +23,27 @@ class QuizCreator extends Controller
         $quiz->setBirthday(date('jS F Y h:i:s'));
 
 
-        $question = new Question("2 + 3?");
-        $question1 = new Question("2 x 2 = 4?");
-        $question2 = new Question("3 x 3?");
-        $question3 = new Question("7 x 0?");
+        $question = new Question("Elephant is?");
+        $question1 = new Question("Lion is a tiger?");
+        $question2 = new Question("How much paws does fish have?");
+        $question3 = new Question("Who is a king of animals?");
 
 
-        $answer1question1 = new Answer("5", 1);
-        $answer2question1 = new Answer("6", 0);
-        $answer3question1 = new Answer("7", 0);
+        $answer1question1 = new Answer("grey", 1);
+        $answer2question1 = new Answer("red", 0);
+        $answer3question1 = new Answer("blue", 0);
 
-        $answer1question2 = new Answer("Yes", 1);
-        $answer2question2 = new Answer("No", 0);
+        $answer1question2 = new Answer("No", 1);
+        $answer2question2 = new Answer("Yes", 0);
 
-        $answer1question3 = new Answer("9", 1);
+        $answer1question3 = new Answer("0", 1);
         $answer2question3 = new Answer("2", 0);
         $answer3question3 = new Answer("4", 0);
 
-        $answer1question4 = new Answer("0", 1);
-        $answer2question4 = new Answer("3", 0);
-        $answer3question4 = new Answer("5", 0);
-        $answer4question4 = new Answer("4", 0);
+        $answer1question4 = new Answer("Elephant", 0);
+        $answer2question4 = new Answer("Lion", 1);
+        $answer3question4 = new Answer("Cat", 0);
+        $answer4question4 = new Answer("Puppy", 0);
 
 
         $question->setQuiz($quiz);

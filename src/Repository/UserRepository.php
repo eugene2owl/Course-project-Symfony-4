@@ -13,25 +13,31 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    public function findAllOrdLike($pattern, $field, $order): array
+    public function findAllOrdLike(string $pattern, string $fieldSort, string $order, array $fieldFilter): array
     {
-        if ($field == 'name') {
-            $field = 'firstname';
+        if ($fieldSort == 'name') {
+            $fieldSort = 'firstname';
         }
         $conn = $this->getEntityManager()->getConnection();
         $sql = 'SELECT * FROM user p';
         if ($pattern != '') {
-            $sql .= ' WHERE p.username LIKE :pattern OR
-            p.id LIKE :pattern OR
-            p.city LIKE :pattern OR
-            p.email LIKE :pattern OR
-            p.roles LIKE :pattern OR
-            p.firstname LIKE :pattern OR
-            p.secondname LIKE :pattern OR
-            p.thirdname LIKE :pattern';
+            if (count($fieldFilter) > 0) {
+                $sql .= ' WHERE ';
+                for ($number = 0; $number < count($fieldFilter); $number++) {
+                    if ($fieldFilter[$number] == 'username') {
+                        $number > 0 ? $sql .= ' OR p.username LIKE :pattern' : $sql .= 'p.username LIKE :pattern';
+                    }
+                    if ($fieldFilter[$number] == 'name') {
+                        $number > 0 ? $sql .= ' OR p.firstname LIKE :pattern' : $sql .= 'p.firstname LIKE :pattern';
+                    }
+                    if ($fieldFilter[$number] == 'id') {
+                        $number > 0 ? $sql .= ' OR p.id LIKE :pattern' : $sql .= 'p.id LIKE :pattern';
+                    }
+                }
+            }
         }
-        if ($field != '') {
-            $sql .= ' ORDER BY p.'.$field.' '.$order;
+        if ($fieldSort != '') {
+            $sql .= ' ORDER BY p.'.$fieldSort.' '.$order;
         }
         $stmt = $conn->prepare($sql);
         $stmt->execute(['pattern' => '%'.$pattern.'%']);

@@ -119,21 +119,22 @@ class QuizDrawer extends Controller
         return $result;
     }
 
-    public function createNewOrReplaceExistingResult(Quiz $currentQuiz, User $user, Question $question, Controller $controller): Result
+    public function createNewOrReplaceExistingResult(Quiz $quiz, User $user, Question $question, Controller $controller): Result
     {
-        $repository = $controller->getDoctrine()->getRepository(Result::class);
-        $resultsArray = $repository->findAll();
-        for ($resultNumber = 0; $resultNumber < count($resultsArray); $resultNumber++) {
-            if ($resultsArray[$resultNumber]->getQuiz() == $currentQuiz &&
-                $resultsArray[$resultNumber]->getQuestion() == $question &&
-                $resultsArray[$resultNumber]->getUser() == $user
-            ) {
-                $neededResult = $resultsArray[$resultNumber];
-            }
+        $resultsArray = $this->findSpecialResult($user, $quiz, $question, $controller);
+        if (count($resultsArray) != 0) {
+            $neededResult = $resultsArray[0];
         }
         if (!isset($neededResult)) {
             $neededResult = new Result();
         }
         return $neededResult;
+    }
+
+    private function findSpecialResult(User $user, Quiz $quiz, Question $question, Controller $controller): array
+    {
+        $repository = $controller->getDoctrine()->getRepository(Result::class);
+        $criteria = ['user' => $user->getId(), 'quiz' => $quiz->getId(), 'question' => $question->getId()];
+        return $repository->findBy($criteria);
     }
 }

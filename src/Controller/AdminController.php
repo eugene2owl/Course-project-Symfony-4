@@ -39,11 +39,12 @@ class AdminController extends Controller
     {
         $dataFromAjax = $request->get('data');
 
-        $dataFromAjaxSortField = $dataFromAjax[0]['sortbyfield'];
-        $dataFromAjaxSortOrder = $dataFromAjax[1]['order'];
-        $dataFromAjaxPattern = $dataFromAjax[2]['pattern'];
+        $sortField = $dataFromAjax[0]['sortbyfield'];
+        $sortOrder = $dataFromAjax[1]['order'];
+        $pattern = $dataFromAjax[2]['pattern'];
+        $filterField = $dataFromAjax[3]['filterableColumns'];
 
-        $entities = $puller->getEntitiesArray($slug, $dataFromAjaxSortField, $dataFromAjaxPattern, $dataFromAjaxSortOrder, $this);
+        $entities = $puller->getEntitiesArray($slug, $sortField, $pattern, $sortOrder, $filterField, $this);
         $table_data = [
             'entities' => $entities,
         ];
