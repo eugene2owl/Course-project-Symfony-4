@@ -1,6 +1,10 @@
 (function ($) {
 
-    let defaults = {dataURL: 'http://symfony4.loc/admin/quiz', sortableColumns: ['id'], filterableColumns: ['id']};
+    let defaults = {
+        dataURL: 'http://symfony4.loc/admin/quiz',
+        sortableColumns: ['id'],
+        filterableColumns: ['id']
+    };
     let options = {};
 
     $.fn.mySimplePlugin = function (params) {
@@ -209,7 +213,7 @@
             let currentHeader = 0;
             let headerRow = document.createElement('tr');
             headerTagArray.forEach(function (th) {
-                if (currentHeader == 1) {
+                if (currentHeader === 1) {
                     th.setAttribute('id', 'header2');
                 }
                 headerRow.appendChild(th);
@@ -228,11 +232,11 @@
             cellArray.forEach(function (text) {
                 dataTagArray.push(makeCell(text, false));
             });
-            let ordinarRow = document.createElement('tr');
+            let ordinaryRow = document.createElement('tr');
             dataTagArray.forEach(function (th) {
-                ordinarRow.appendChild(th);
+                ordinaryRow.appendChild(th);
             });
-            return ordinarRow;
+            return ordinaryRow;
         }
 
         function pushToCellArray(data, cellArray) {
@@ -318,7 +322,7 @@
     };
 })(jQuery);
 
-$('p').mySimplePlugin({
+$('#entities-grid').mySimplePlugin({
     dataURL: 'http://symfony4.loc/admin/user',
     sortableColumns: ['id', 'name', 'username'],
     filterableColumns: ['id', 'name', 'username'],
