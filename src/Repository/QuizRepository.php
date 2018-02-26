@@ -26,14 +26,14 @@ class QuizRepository extends ServiceEntityRepository
         $sql = 'SELECT * FROM quiz p';
         if ($pattern != '') {
             $sql .= ' WHERE ';
-            for ($number = 0; $number < count($fieldFilter); $number++) {
-                if ($fieldFilter[$number] == 'username') {
+            foreach ($fieldFilter as $number => $item) {
+                if ($item == 'username') {
                     $number > 0 ? $sql .= ' OR p.first_name_Lider LIKE :pattern' : $sql .= 'p.first_name_Lider LIKE :pattern';
                 }
-                if ($fieldFilter[$number] == 'name') {
+                if ($item == 'name') {
                     $number > 0 ? $sql .= ' OR p.quizname LIKE :pattern' : $sql .= 'p.quizname LIKE :pattern';
                 }
-                if ($fieldFilter[$number] == 'id') {
+                if ($item == 'id') {
                     $number > 0 ? $sql .= ' OR p.id LIKE :pattern' : $sql .= 'p.id LIKE :pattern';
                 }
             }

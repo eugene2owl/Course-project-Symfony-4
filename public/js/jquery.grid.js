@@ -157,6 +157,9 @@
                     disabledRadioButtons.push($('#usernameSort')[0]);
                     break;
                 case 'resultButton':
+                    disabledRadioButtons.push($('#usernameSort')[0]);
+                    disabledRadioButtons.push($('#nameSort')[0]);
+                    break;
                 default:
                     disabledRadioButtons.push($('#usernameSort')[0]);
                     disabledRadioButtons.push($('#idSort')[0]);
